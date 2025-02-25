@@ -101,4 +101,17 @@ class PermissionmaippingController extends Controller
         }
         return response()->json($transForm);
     }
+
+    public function getcategory(){
+        $pagecates = Permissioncategory::orderBy('id','asc')->get();
+        // return $pages;
+        $transForm = [];
+        foreach ($pagecates as $page) {
+            $dataobject = (object)[];
+            $dataobject->id =  $page->id;
+            $dataobject->pc_name =  $page->pc_name;
+            $transForm[]=$dataobject;
+        }
+        return response()->json($transForm);
+    }
 }

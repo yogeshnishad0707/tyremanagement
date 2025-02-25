@@ -12,7 +12,7 @@ class TokenAuth
     public function handle(Request $request, Closure $next): Response
     {
         $token = $request->bearerToken();
-
+        // dd($token);
         if (!$token) {
             return response()->json(['error' => 'No token provided'], 401);
         }

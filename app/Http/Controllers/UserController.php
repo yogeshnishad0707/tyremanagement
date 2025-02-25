@@ -8,12 +8,25 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Password;
 
 class UserController extends Controller
 {
+    public function index()
+    {
+        dd('validate request');
+    }
+
     public function userlist()
     {
-        $users = User::all();
+        // Get all users along with their associated role and parent role
+        $users = DB::table('users')
+            ->join('roles as roles', 'users.role_id', '=', 'roles.id')  // Joining the roles table for the current role
+            ->join('roles as parent_roles', 'users.parent_id', '=', 'parent_roles.id')  // Assuming parent_role_id in roles table
+            ->select('users.*', 'roles.name as role_name', 'parent_roles.name as parent_name')  // Select the user's details, role name, and parent role name
+            ->orderBy('users.id', 'asc')  // Ordering users by id in ascending order
+            ->get();
+
         return response()->json($users);
     }
 
@@ -96,7 +109,7 @@ class UserController extends Controller
         }
     }
 
-    public function deleteuser(Request $request,$id)
+    public function deleteuser(Request $request, $id)
     {
         try {
             $user = User::findOrFail($id);
@@ -130,29 +143,52 @@ class UserController extends Controller
     //     }
     // }
 
-    public function getroles(){
+    public function getroles()
+    {
         $roles = DB::table('roles')->select('roles.*')->get();
         // return response()->json($roles);
         $transformedRoles = [];
-        foreach($roles as $role){
-            $dataObject=(object)[];
-            $dataObject->id=$role->id;
-            $dataObject->name=$role->name;
+        foreach ($roles as $role) {
+            $dataObject = (object)[];
+            $dataObject->id = $role->id;
+            $dataObject->name = $role->name;
             $transformedRoles[] = $dataObject;
         }
         return response()->json($transformedRoles);
     }
 
-    public function getparentroles(){
-        $roles = DB::table('roles')->whereIn('id',[3,4])->get();
+    public function getparentroles()
+    {
+        $roles = DB::table('roles')->whereIn('id', [3, 4])->get();
         // return response()->json($roles);
         $transformedRoles = [];
-        foreach($roles as $role){
-            $dataObject=(object)[];
-            $dataObject->id=$role->id;
-            $dataObject->name=$role->name;
+        foreach ($roles as $role) {
+            $dataObject = (object)[];
+            $dataObject->id = $role->id;
+            $dataObject->name = $role->name;
             $transformedRoles[] = $dataObject;
         }
         return response()->json($transformedRoles);
+    }
+
+    public function sendRentLinkEmail(Request $request)
+    {
+        // Validate the email
+        // return $request;
+        $request->validate(['email' => 'required|email']);
+        // Send the rent reset link
+        $status = Password::sendRentLink($request->only('email'));
+        // Check if the reset link was sent successfully
+        if ($status === Password::RESET_LINK_SENT) {
+            return response()->json(['message' => $status], 200);
+        }
+        // If something goes wrong, return an error response
+        return response()->json(['message' => 'Failed to send reset link. Please try again.'], 500);
+    }
+
+
+    public function resetPassword(Request $request)
+    {
+        return $request;
     }
 }
