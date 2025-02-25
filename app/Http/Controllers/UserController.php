@@ -13,7 +13,16 @@ class UserController extends Controller
 {
     public function userlist()
     {
-        $users = User::all();
+        // Get all users along with their associated role
+        // $users = User::orderBy('id','asc')->get();
+        $users = DB::table('users')
+        ->join('roles', 'users.role_id', '=', 'roles.id')
+        ->join('roles as parent_roles', 'users.parent_id', '=', 'parent_roles.id')
+        ->select('users.*', 'roles.name as role_name','parent_roles.name as parent_name')
+         // You can select columns you need, here I’m adding the role name
+        ->orderBy('users.id', 'asc')  // Ordering users by id in ascending order
+        ->get();
+
         return response()->json($users);
     }
 

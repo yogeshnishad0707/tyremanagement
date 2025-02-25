@@ -15,6 +15,11 @@ class permissionCategory extends Seeder
     {
         DB::table('permissioncategories')->insert([
             [
+                'pc_name'=>'View',
+                'created_at' => now(),
+                'updated_at'=>now(),
+            ],
+            [
                 'pc_name'=>'Add',
                 'created_at' => now(),
                 'updated_at'=>now(),
@@ -26,11 +31,6 @@ class permissionCategory extends Seeder
             ],
             [
                 'pc_name'=>'Delete',
-                'created_at' => now(),
-                'updated_at'=>now(),
-            ],
-            [
-                'pc_name'=>'View',
                 'created_at' => now(),
                 'updated_at'=>now(),
             ],

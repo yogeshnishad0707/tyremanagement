@@ -21,11 +21,14 @@ Route::post('logout', [AuthController::class, 'logout'])->name('logout')->middle
 // Route::middleware([TokenAuth::class])->group(function () {
     Route::get('userlist', [UserController::class, 'userlist']);
     Route::post('adduser', [UserController::class, 'adduser']);
-    Route::post('updateuser/{userid}', [UserController::class, 'updateuser']);
-    Route::post('deleteuser/{id}', [UserController::class, 'deleteuser']);
+    Route::put('updateuser/{userid}', [UserController::class, 'updateuser']);
+    Route::delete('deleteuser/{id}', [UserController::class, 'deleteuser']);
     Route::post('multideleteuser', [UserController::class, 'multideleteuser']);
     Route::get('getroles', [UserController::class, 'getroles']);
     Route::get('getparentroles', [UserController::class, 'getparentroles']);
     Route::resource('permissionmaipping', PermissionmaippingController::class);
     Route::get('getpagename', [PermissionmaippingController::class, 'getpagename']);
+    Route::get('getcategory', [PermissionmaippingController::class, 'getcategory']);
 // });
+
+
