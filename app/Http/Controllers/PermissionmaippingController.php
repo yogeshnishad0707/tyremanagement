@@ -12,6 +12,15 @@ class PermissionmaippingController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function getus()
+    {
+        return "hello";
+        die;
+        //$users = User::where('role_id', $roleid)->get();
+        // return $users;
+        // die;
+    }
+
     public function index()
     {
         //

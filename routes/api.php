@@ -25,13 +25,13 @@ Route::middleware([TokenAuth::class])->group(function () {
     Route::get('userlist', [UserController::class, 'userlist']);
     Route::post('adduser', [UserController::class, 'adduser']);
     Route::post('updateuser/{userid}', [UserController::class, 'updateuser']);
-   
-    Route::post('multideleteuser', [UserController::class, 'multideleteuser']);
+    Route::post('deleteuser/{id}', [UserController::class, 'deleteuser']);
     Route::get('getroles', [UserController::class, 'getroles']);
+    Route::post('multideleteuser', [UserController::class, 'multideleteuser']);
+    Route::get('getuserbyRole/{role_id}/{parent_id}', [UserController::class, 'getuserbyRole']);
     Route::get('getparentroles', [UserController::class, 'getparentroles']);
     Route::resource('permissionmaipping', PermissionmaippingController::class);
     Route::get('getpagename', [PermissionmaippingController::class, 'getpagename']);
     Route::get('getcategory', [PermissionmaippingController::class, 'getcategory']);
 });
 
-Route::post('deleteuser/{id}', [UserController::class, 'deleteuser']);

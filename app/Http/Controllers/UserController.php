@@ -12,23 +12,35 @@ use Illuminate\Support\Facades\Password;
 
 class UserController extends Controller
 {
-    public function index()
-    {
-        dd('validate request');
-    }
-
     public function userlist()
     {
-        // Get all users along with their associated role and parent role
-        $users = DB::table('users')
-            ->join('roles as roles', 'users.role_id', '=', 'roles.id')  // Joining the roles table for the current role
-            ->join('roles as parent_roles', 'users.parent_id', '=', 'parent_roles.id')  // Assuming parent_role_id in roles table
-            ->select('users.*', 'roles.name as role_name', 'parent_roles.name as parent_name')  // Select the user's details, role name, and parent role name
-            ->orderBy('users.id', 'asc')  // Ordering users by id in ascending order
-            ->get();
-
-        return response()->json($users);
+        $users = User::orderBy('id','asc')->get();
+        $transformedUserRoles = [];
+        foreach ($users as $userrole) {
+            $parentname =  getval('roles', 'id', $userrole->parent_id, 'name');
+            $dataObject = (object)[];
+            $dataObject->role_id = $userrole->role->name;
+            $dataObject->parent_id = $parentname;
+            $dataObject->name = $userrole->name;
+            $dataObject->mobile_no = $userrole->mobile_no;
+            $dataObject->email = $userrole->email;
+            $dataObject->address = $userrole->address;
+            $transformedUserRoles[] = $dataObject;
+        }
+        return response()->json($transformedUserRoles);
     }
+
+    // public function userlist()
+    // {
+    //     // Get all users along with their associated role and parent role
+    //     $users = DB::table('users')
+    //         ->join('roles as roles', 'users.role_id', '=', 'roles.id')  // Joining the roles table for the current role
+    //         ->join('roles as parent_roles', 'users.parent_id', '=', 'parent_roles.id')  // Assuming parent_role_id in roles table
+    //         ->select('users.*', 'roles.name as role_name', 'parent_roles.name as parent_name')  // Select the user's details, role name, and parent role name
+    //         ->orderBy('users.id', 'asc')  // Ordering users by id in ascending order
+    //         ->get();
+    //     return response()->json($users);
+    // }
 
     public function adduser(Request $request)
     {
@@ -145,7 +157,9 @@ class UserController extends Controller
 
     public function getroles()
     {
+        // return "hello";
         $roles = DB::table('roles')->select('roles.*')->get();
+        // return $roles;die;
         // return response()->json($roles);
         $transformedRoles = [];
         foreach ($roles as $role) {
@@ -159,7 +173,7 @@ class UserController extends Controller
 
     public function getparentroles()
     {
-        $roles = DB::table('roles')->whereIn('id', [3, 4])->get();
+        $roles = DB::table('roles')->whereIn('id', [1, 2])->get();
         // return response()->json($roles);
         $transformedRoles = [];
         foreach ($roles as $role) {
@@ -171,24 +185,43 @@ class UserController extends Controller
         return response()->json($transformedRoles);
     }
 
-    public function sendRentLinkEmail(Request $request)
+    public function getuserbyRole($role_id, $parent_id)
     {
-        // Validate the email
-        // return $request;
-        $request->validate(['email' => 'required|email']);
-        // Send the rent reset link
-        $status = Password::sendRentLink($request->only('email'));
-        // Check if the reset link was sent successfully
-        if ($status === Password::RESET_LINK_SENT) {
-            return response()->json(['message' => $status], 200);
+        // return "hello";die;
+        $users = User::where('role_id', $role_id)->where('parent_id', $parent_id)->get();
+        $transformedUserRoles = [];
+        foreach ($users as $userrole) {
+            $parentname =  getval('roles', 'id', $userrole->parent_id, 'name');
+            $dataObject = (object)[];
+            $dataObject->role_id = $userrole->role->name;
+            $dataObject->parent_id = $parentname;
+            $dataObject->name = $userrole->name;
+            $dataObject->mobile_no = $userrole->mobile_no;
+            $dataObject->email = $userrole->email;
+            $dataObject->address = $userrole->address;
+            $transformedUserRoles[] = $dataObject;
         }
-        // If something goes wrong, return an error response
-        return response()->json(['message' => 'Failed to send reset link. Please try again.'], 500);
+        return response()->json($transformedUserRoles);
     }
 
+    // public function sendRentLinkEmail(Request $request)
+    // {
+    //     // Validate the email
+    //     // return $request;
+    //     $request->validate(['email' => 'required|email']);
+    //     // Send the rent reset link
+    //     $status = Password::sendRentLink($request->only('email'));
+    //     // Check if the reset link was sent successfully
+    //     if ($status === Password::RESET_LINK_SENT) {
+    //         return response()->json(['message' => $status], 200);
+    //     }
+    //     // If something goes wrong, return an error response
+    //     return response()->json(['message' => 'Failed to send reset link. Please try again.'], 500);
+    // }
 
-    public function resetPassword(Request $request)
-    {
-        return $request;
-    }
+
+    // public function resetPassword(Request $request)
+    // {
+    //     return $request;
+    // }
 }
