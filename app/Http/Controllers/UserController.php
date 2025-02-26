@@ -9,13 +9,20 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Cache;
+
+Cache::flush();
 
 class UserController extends Controller
 {
     public function userlist()
     {
+        $users = User::orderBy('id', 'asc')->get();
 
-        $users = User::orderBy('id','asc')->get();
+        if ($users->isEmpty()) {
+            return response()->json(['error' => 'No users list found.'], 404);
+        }
+
         $transformedUserRoles = [];
         foreach ($users as $userrole) {
             // return 'okkk';die;
@@ -166,8 +173,9 @@ class UserController extends Controller
     {
         // return "hello";
         $roles = DB::table('roles')->select('roles.*')->get();
-        // return $roles;die;
-        // return response()->json($roles);
+        if ($roles->isEmpty()) {
+            return response()->json(['error' => 'No roles found.'], 404);
+        }
         $transformedRoles = [];
         foreach ($roles as $role) {
             $dataObject = (object)[];
@@ -192,23 +200,84 @@ class UserController extends Controller
         return response()->json($transformedRoles);
     }
 
-    public function getuserbyRole($role_id, $parent_id)
+    // public function GetUserbyRoleId($role_id, $parent_id)
+    // {
+    //     if (!$role_id) {
+    //         $obj = ["Status" => false, "success" => 0, "errors" => "Invalid Role Id"];
+    //         return response()->json($obj);
+    //     }
+    //     if (!$parent_id) {
+    //         $obj = ["Status" => false, "success" => 0, "errors" => "Invalid Parent Id"];
+    //         return response()->json($obj);
+    //     }
+    //     $userdatas = DB::table('users')
+    //         ->select('users.*')
+    //         ->where("role_id", $role_id)
+    //         ->where('parent_id', $parent_id)
+    //         ->orderBy('id', 'desc')->get();
+
+    //     $arrayObj = [];
+
+    //     foreach ($userdatas as $userdata) {
+
+    //         $dataObje = (object)[];
+    //         $dataObje->id = $userdata->id;
+    //         $dataObje->name = $userdata->name;
+    //         $dataObje->email = $userdata->email;
+    //         $dataObje->mobile_no = $userdata->mobile_no;
+    //         $dataObje->address = $userdata->address;
+
+    //         $arrayObj[] = $dataObje;
+    //     }
+    //     if (count($arrayObj) > 0) {
+    //         $obj = ["Status" => true, "success" => 1, "data" => ['Users' => $arrayObj], "msg" => "User List"];
+    //         return response()->json($obj);
+    //     } else {
+    //         $obj = ["Status" => false, "success" => 0, "errors" => "No data found."];
+    //         return response()->json($obj);
+    //     }
+    // }
+
+    public function getUserByRoleId(Request $request)
     {
-        // return "hello";die;
-        $users = User::where('role_id', $role_id)->where('parent_id', $parent_id)->get();
-        $transformedUserRoles = [];
-        foreach ($users as $userrole) {
-            $parentname =  getval('roles', 'id', $userrole->parent_id, 'name');
-            $dataObject = (object)[];
-            $dataObject->role_id = $userrole->role->name;
-            $dataObject->parent_id = $parentname;
-            $dataObject->name = $userrole->name;
-            $dataObject->mobile_no = $userrole->mobile_no;
-            $dataObject->email = $userrole->email;
-            $dataObject->address = $userrole->address;
-            $transformedUserRoles[] = $dataObject;
+                    // return $request;die;
+        $role_id = $request->query('role_id');
+        $parent_id = $request->query('parent_id');
+
+        if (!$role_id) {
+            return response()->json(["Status" => false, "success" => 0, "errors" => "Invalid Role Id!!"]);
         }
-        return response()->json($transformedUserRoles);
+        if (!$parent_id) {
+            return response()->json(["Status" => false, "success" => 0, "errors" => "Invalid Parent Id!!"]);
+        }
+
+        $users = DB::table('users')
+            ->select('users.*')
+            ->where('role_id', $role_id)
+            ->where('parent_id', $parent_id)
+            ->orderBy('id', 'Asc')
+            ->get();
+
+        if ($users->isEmpty()) {
+            return response()->json(["Status" => false, "success" => 0, "errors" => "No data found."]);
+        }
+
+        $arrayObj = [];
+        foreach ($users as $user) {
+            $rolename = getval('roles','id',$user->role_id,'name');
+            $parentname = getval('roles','id',$user->parent_id,'name');
+            $dataObje = new \stdClass();
+            $dataObje->role_id = $rolename;
+            $dataObje->parent_id = $parentname;
+            $dataObje->name = $user->name;
+            $dataObje->mobile_no = $user->mobile_no;
+            $dataObje->email = $user->email;
+            $dataObje->address = $user->address;
+
+            $arrayObj[] = $dataObje;
+        }
+
+        return response()->json(["Status" => true, "success" => 1, "data" => ['posts' => $arrayObj], "msg" => "User List"]);
     }
 
     // public function sendRentLinkEmail(Request $request)
