@@ -16,6 +16,8 @@ class AuthController extends Controller
     // User Login API
     public function login(Request $request)
     {
+        // print_r($request->all());
+        // die;
         // return $request;
         // Validate user credentials
         $credentials = $request->validate([
@@ -27,7 +29,6 @@ class AuthController extends Controller
         if (!Auth::attempt($credentials)) {
             return response()->json(['message' => 'Invalid Credentials'], 401);
         }
-
         // Retrieve authenticated user using the email instead of Auth::user()
         $user = User::where('email', $request->email)->first();
 
@@ -39,7 +40,7 @@ class AuthController extends Controller
         $token = hash('sha256', Str::random(60));
 
         // Delete any existing token for the user
-        UserToken::where('userid', $user->id)->delete();
+        // UserToken::where('userid', $user->id)->delete();
 
         // Store new token in the database
         $userToken = UserToken::create([
@@ -54,6 +55,8 @@ class AuthController extends Controller
 
         return response()->json([
             'userid' => $user->id,
+            'role_id' => $user->role_id,
+            'parent_id' => $user->parent_id,
             'access_token' => $token,
             'token_type' => 'Bearer',
             'expires_in' => $userToken->expires_at,
