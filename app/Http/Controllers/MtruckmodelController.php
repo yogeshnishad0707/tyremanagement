@@ -1,0 +1,119 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\Mtruckmodel;
+use App\Models\Mtruckmake;
+use Illuminate\Support\Facades\Validator;
+
+class MtruckmodelController extends Controller
+{
+    public function truckmodellist()
+    {
+        $mtruckmodels = Mtruckmodel::orderBy('id','desc')->get();
+
+        $transTruckModel = [];
+        foreach ($mtruckmodels as $mtruckmodel) {
+            $datatruckmodel = (object)[];
+            $datatruckmodel->truckmake_id = $mtruckmodel->truckmake_id;
+            $datatruckmodel->category_name = $mtruckmodel->category_name;
+            $datatruckmodel->status = $mtruckmodel->status;
+            $datatruckmodel->operatorid = $mtruckmodel->operatorid;
+            $transTruckModel[] = $datatruckmodel;
+        }
+        return response()->json($transTruckModel);
+    }
+
+    public function insertruckmodel(Request $request)
+    {
+        // return "hello";die;
+        $validator = Validator::make($request->all(), [
+            'truckmake_id' => 'required',
+            'category_name' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            $obj = ["Status" => false, "success" => 0, "errors" => $validator->errors()];
+            return response()->json($obj);
+        }
+
+        // Create a new user
+        $mtruckmodels = new Mtruckmodel();
+        $mtruckmodels->truckmake_id = $request->truckmake_id;
+        $mtruckmodels->category_name =  $request->category_name;
+        $mtruckmodels->status =  $request->status;
+        $mtruckmodels->operatorid = $request->operatorid;
+
+        // $existingTyreSize = Mtruckmodel::where('category_name', $mtruckmodels->category_name)->first();
+        // if ($existingTyreSize) {
+        //     // Handle duplicate Email Id
+        //     $obj = ["Status" => false, "success" => 0, "errors" => 'The tyre type has already been taken.'];
+        //     return response()->json($obj);
+        // }
+        try {
+            $mtruckmodels->save();
+            return response()->json(['message' => 'Truck Model Added successfully!']);
+        } catch (\Exception $ex) {
+            return $ex;
+            $obj = ["Status" => false, "success" => 0, "msg" => "Truck Model Not Added!!"];
+            return response()->json($obj);
+        }
+    }
+
+    public function updatetruckmodel(Request $request, $id)
+    {
+        // return "ok";
+        $validator = Validator::make($request->all(),[
+            'truckmake_id'=>'required',
+            'category_name'=>'required',
+        ]);
+        if($validator->fails()){
+            $val = ['Stauts'=> false, 'success'=> '0','errors'=>$validator->errors()];
+            return response()->json($val);
+        }
+        try {
+            $mtruckmodels = Mtruckmodel::findOrFail($id);
+            $mtruckmodels->update([
+                'truckmake_id'=>$request->truckmake_id,
+                'category_name'=>$request->category_name,
+            ]);
+            return response()->json(['message'=>'Truck Model Updated SuccessFully!!']);
+        } catch (\Exception $ex) {
+            return $ex;
+            $err = ["Status" => false, "success" => 0, "msg" => "Truck Model Not Updated!!"];
+            return response()->json($err);
+        }
+    }
+
+    public function deletetruckmodel($id){
+        // return "ok";die;
+        try {
+            $mtruckmodels = Mtruckmodel::findOrFail($id);
+            $mtruckmodels->delete();
+            return response()->json(['message'=>'Truck Model Deleted SuccessFully!!']);
+        } catch (\Exception $ex) {
+            return $ex;
+            $err = ["Status" => false, "success" => 0, "msg" => "Truck Model Not Deleted!!"];
+            return response()->json($err);
+        }
+    }
+
+    public function gettruckmake(){
+        // return "okk";die;
+        $mtruckmakes = Mtruckmake::orderBy('id','desc')->get(); 
+
+        if ($mtruckmakes->isEmpty()) {
+            return response()->json(['error' => 'No Truck Make Found.'], 404);
+        }
+
+        $transTruckMake = [];
+        foreach ($mtruckmakes as $mtruckmake) {
+            $datatruckmake = (object)[];
+            $datatruckmake->id = $mtruckmake->id;
+            $datatruckmake->category_name = $mtruckmake->category_name;
+            $transTruckMake[] = $datatruckmake;
+        }
+        return response()->json($transTruckMake);
+    }
+}

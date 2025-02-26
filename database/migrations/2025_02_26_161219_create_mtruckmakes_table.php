@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('permissionmaippings', function (Blueprint $table) {
+        Schema::create('mtruckmakes', function (Blueprint $table) {
             $table->id();
-            $table->integer('userid')->nullable();
-            $table->string('pageid')->nullable();
-            $table->string('permissioncat_id')->nullable();
+            $table->string('category_name')->nullable();
+            $table->enum('status',['0','1'])->default('1');
+            $table->unsignedBigInteger('operatorid')->nullable();
             $table->timestamps();
         });
     }
@@ -25,7 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('permissionmaippings');
-        
+        Schema::dropIfExists('mtruckmakes');
     }
 };
