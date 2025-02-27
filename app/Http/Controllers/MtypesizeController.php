@@ -15,8 +15,9 @@ class MtypesizeController extends Controller
 
         $transTyreSize = [];
         foreach ($mtyresizes as $mtyresize) {
+            $tyretypename = getval('mtyretypes','id',$mtyresize->tyretype_id,'category_name');
             $datatyresize = (object)[];
-            $datatyresize->tyretype_id = $mtyresize->tyretype_id;
+            $datatyresize->tyretype_id = $tyretypename;
             $datatyresize->category_name = $mtyresize->category_name;
             $datatyresize->status = $mtyresize->status;
             $datatyresize->operatorid = $mtyresize->operatorid;

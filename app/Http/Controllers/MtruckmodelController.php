@@ -15,8 +15,9 @@ class MtruckmodelController extends Controller
 
         $transTruckModel = [];
         foreach ($mtruckmodels as $mtruckmodel) {
+            $mtruckmakename = getval('mtruckmakes','id',$mtruckmodel->truckmake_id,'category_name');
             $datatruckmodel = (object)[];
-            $datatruckmodel->truckmake_id = $mtruckmodel->truckmake_id;
+            $datatruckmodel->truckmake_id = $mtruckmakename;
             $datatruckmodel->category_name = $mtruckmodel->category_name;
             $datatruckmodel->status = $mtruckmodel->status;
             $datatruckmodel->operatorid = $mtruckmodel->operatorid;
