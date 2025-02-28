@@ -134,5 +134,5 @@ class MtyretypeController extends Controller
             return response()->json($err);
         }
     }
-    
+
 }
