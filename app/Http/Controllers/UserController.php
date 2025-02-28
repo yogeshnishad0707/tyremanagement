@@ -239,13 +239,8 @@ class UserController extends Controller
     // }
 
     public function getUserByRoleId(Request $request)
-<<<<<<< HEAD
-    {
-                    // return $request;die;
-=======
-    { 
-        // return $request;die;
->>>>>>> 5504aacf9da4c96b1fdf199132e9e00c728f456a
+
+   {
         $role_id = $request->query('role_id');
         $parent_id = $request->query('parent_id');
 
@@ -334,7 +329,7 @@ class UserController extends Controller
         foreach ($users as $user) {
             $rolename = getval('roles', 'id', $user->role_id, 'name');
             $parentname = getval('roles', 'id', $user->parent_id, 'name');
-            
+
             $dataObj = new \stdClass();
             $dataObj->role_id = $rolename;
             $dataObj->parent_id = $parentname;

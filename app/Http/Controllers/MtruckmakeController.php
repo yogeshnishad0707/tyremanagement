@@ -70,8 +70,6 @@ class MtruckmakeController extends Controller
             $mtruckmakes = Mtruckmake::findOrFail($id);
             $mtruckmakes->update([
                 'category_name'=>$request->category_name,
-                'status'=>$request->status,
-                'operatorid'=>$request->operatorid,
             ]);
             return response()->json(['message'=>'Truck Make Updated SuccessFully!!']);
         } catch (\Exception $ex) {
