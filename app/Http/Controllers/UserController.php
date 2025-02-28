@@ -234,7 +234,7 @@ class UserController extends Controller
 
     public function getUserByRoleId(Request $request)
     { 
-                    // return $request;die;
+        // return $request;die;
         $role_id = $request->query('role_id');
         $parent_id = $request->query('parent_id');
 
@@ -270,8 +270,77 @@ class UserController extends Controller
             
             $arrayObj[] = $dataObje;
         }
-
         return response()->json(["Status" => true, "success" => 1, "data" => ['posts' => $arrayObj], "msg" => "User List"]);
+    }
+
+    public function usersearch(Request $request)
+    {
+        // Validate the input fields
+        $validator = Validator::make($request->all(), [
+            'name' => 'nullable|string|max:255',
+            'email' => 'nullable|email|max:255',
+            'mobile_no' => 'nullable|string|max:15',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "Status" => false,
+                "success" => 0,
+                "errors" => $validator->errors()
+            ]);
+        }
+
+        // Initialize query builder
+        $query = DB::table('users');
+
+        // Apply search filters if any
+        if ($request->has('name') && $request->name) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        if ($request->has('email') && $request->email) {
+            $query->where('email', 'like', '%' . $request->email . '%');
+        }
+
+        if ($request->has('mobile_no') && $request->mobile_no) {
+            $query->where('mobile_no', 'like', '%' . $request->mobile_no . '%');
+        }
+
+        // Get filtered users
+        $users = $query->orderBy('id', 'asc')->get();
+
+        // If no users found
+        if ($users->isEmpty()) {
+            return response()->json([
+                "Status" => false,
+                "success" => 0,
+                "errors" => "No data found."
+            ]);
+        }
+
+        // Prepare response data
+        $arrayObj = [];
+        foreach ($users as $user) {
+            $rolename = getval('roles', 'id', $user->role_id, 'name');
+            $parentname = getval('roles', 'id', $user->parent_id, 'name');
+            
+            $dataObj = new \stdClass();
+            $dataObj->role_id = $rolename;
+            $dataObj->parent_id = $parentname;
+            $dataObj->name = $user->name;
+            $dataObj->mobile_no = $user->mobile_no;
+            $dataObj->email = $user->email;
+            $dataObj->address = $user->address;
+
+            $arrayObj[] = $dataObj;
+        }
+
+        return response()->json([
+            "Status" => true,
+            "success" => 1,
+            "data" => ['posts' => $arrayObj],
+            "msg" => "User List"
+        ]);
     }
 
     // public function sendRentLinkEmail(Request $request)

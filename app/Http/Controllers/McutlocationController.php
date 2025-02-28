@@ -71,6 +71,8 @@ class McutlocationController extends Controller
             $mcutlocations = Mcutlocation::findOrFail($id);
             $mcutlocations->update([
                 'category_name'=>$request->category_name,
+                'status'=>$request->status,
+                'operatorid'=>$request->operatorid,
             ]);
             return response()->json(['message'=>'Cut Location Updated SuccessFully!!']);
         } catch (\Exception $ex) {

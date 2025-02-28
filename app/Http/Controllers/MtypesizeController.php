@@ -78,6 +78,8 @@ class MtypesizeController extends Controller
             $mtyresizes->update([
                 'tyretype_id'=>$request->tyretype_id,
                 'category_name'=>$request->category_name,
+                'status'=>$request->status,
+                'operatorid'=>$request->operatorid,
             ]);
             return response()->json(['message'=>'Tyre Size Updated SuccessFully!!']);
         } catch (\Exception $ex) {

@@ -71,6 +71,8 @@ class MacculocationController extends Controller
             $maccuratelocations = Maccuratelocation::findOrFail($id);
             $maccuratelocations->update([
                 'category_name'=>$request->category_name,
+                'status'=>$request->status,
+                'operatorid'=>$request->operatorid,
             ]);
             return response()->json(['message'=>'Accurate Location Updated SuccessFully!!']);
         } catch (\Exception $ex) {
