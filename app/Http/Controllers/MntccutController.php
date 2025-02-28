@@ -71,6 +71,8 @@ class MntccutController extends Controller
             $mntccuts = Mntccut::findOrFail($id);
             $mntccuts->update([
                 'category_name'=>$request->category_name,
+                'status'=>$request->status,
+                'operatorid'=>$request->operatorid,
             ]);
             return response()->json(['message'=>'NTC & TC Cut Updated SuccessFully!!']);
         } catch (\Exception $ex) {

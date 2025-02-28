@@ -78,6 +78,8 @@ class MtruckmodelController extends Controller
             $mtruckmodels->update([
                 'truckmake_id'=>$request->truckmake_id,
                 'category_name'=>$request->category_name,
+                'status'=>$request->status,
+                'operatorid'=>$request->operatorid,
             ]);
             return response()->json(['message'=>'Truck Model Updated SuccessFully!!']);
         } catch (\Exception $ex) {

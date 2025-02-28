@@ -71,6 +71,8 @@ class MtstypeController extends Controller
             $mtyrestatustypes = Mtyrestatustype::findOrFail($id);
             $mtyrestatustypes->update([
                 'category_name'=>$request->category_name,
+                'status'=>$request->status,
+                'operatorid'=>$request->operatorid,
             ]);
             return response()->json(['message'=>'Tyre Status Updated SuccessFully!!']);
         } catch (\Exception $ex) {
