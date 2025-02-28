@@ -18,6 +18,7 @@ class MtyretypeController extends Controller
         $transTyreType = [];
         foreach ($mtyretypes as $mtyretype) {
             $datatyretype = (object)[];
+            $datatyretype->id = $mtyretype->id;
             $datatyretype->category_name = $mtyretype->category_name;
             $datatyretype->status = $mtyretype->status;
             $datatyretype->operatorid = $mtyretype->operatorid;

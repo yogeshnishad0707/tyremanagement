@@ -87,7 +87,31 @@ class PermissionmaippingController extends Controller
      */
     public function update(Request $request, Permissionmaipping $permissionmaipping)
     {
-        //
+        // return $request;
+        $permissioncat_ids = explode(',', $request->permissioncat_id); // Explode the string into an array
+        $page_names = explode(',', $request->pageid);
+
+        try {
+            $permissionMappings = [];
+            foreach ($page_names as $pagename) {
+                // foreach ($permissioncat_ids as $permissioncat_id) {
+                    $permissionMapping = new Permissionmaipping();
+                    $permissionMapping->userid = $request->userid;
+                    $permissionMapping->pageid = $pagename;
+                    $permissionMapping->permissioncat_id = json_encode($permissioncat_ids); // Store as a JSON array
+                    $permissionMappings[] = $permissionMapping;
+                // }
+            }
+            Permissionmaipping::insert(
+                array_map(function ($permissionMapping) {
+                    return $permissionMapping->getAttributes();
+                }, $permissionMappings)
+            );
+            return response()->json(['message' => 'Permission Mappings Added successfully!']);
+        } catch (\Exception $ex) {
+            return $ex;
+            return response()->json(['Status' => false, 'success' => 0, 'msg' => 'Permission Mapping Not Added. Failed!', 'error' => $ex->getMessage()]);
+        }
     }
 
     /**

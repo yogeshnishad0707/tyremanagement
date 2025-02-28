@@ -15,6 +15,7 @@ class MtstypeController extends Controller
         $transTStype = [];
         foreach ($mtyrestatustypes as $mtstype) {
             $datatstype = (object)[];
+            $datatstype->id = $mtstype->id;
             $datatstype->category_name = $mtstype->category_name;
             $datatstype->status = $mtstype->status;
             $datatstype->operatorid = $mtstype->operatorid;

@@ -24,6 +24,7 @@ class TyresizeinfoController extends Controller
             $tyreposition = getval('mtyrepositions','id',$tyresiteinfo->position_id,'category_name');
 
             $dataTyreSiteInfo = (object)[];
+            $dataTyreSiteInfo->id = $tyresiteinfo->id;
             $dataTyreSiteInfo->project_id = $projectname;
             $dataTyreSiteInfo->truck_modal_id = $truckmodel;
             $dataTyreSiteInfo->tyre_info_id = $tyreinfo;

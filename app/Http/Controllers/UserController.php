@@ -27,6 +27,7 @@ class UserController extends Controller
         foreach ($users as $userrole) {
             $parentname =  getval('roles', 'id', $userrole->parent_id, 'name');
             $dataObject = (object)[];
+            $dataObject->id = $userrole->id;
             $dataObject->role_id = $userrole->role->name;
             $dataObject->parent_id = $parentname;
             $dataObject->name = $userrole->name;

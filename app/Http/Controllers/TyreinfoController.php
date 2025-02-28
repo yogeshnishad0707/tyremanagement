@@ -17,6 +17,7 @@ class TyreinfoController extends Controller
         foreach ($tyreinformations as $tyreinfo) {
             $tyre_size = getval('mtyresizes','id',$tyreinfo->tyresize_id,'category_name');
             $dataTyreInfo = (object)[];
+            $dataTyreInfo->id = $tyreinfo->id;
             $dataTyreInfo->tyresize_id = $tyre_size;
             $dataTyreInfo->make = $tyreinfo->make;
             $dataTyreInfo->tyre_no = $tyreinfo->tyre_no;

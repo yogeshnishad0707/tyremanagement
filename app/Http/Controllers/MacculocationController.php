@@ -15,6 +15,7 @@ class MacculocationController extends Controller
         $transAccurateLocation = [];
         foreach ($maccuratelocations as $maccuratelocation) {
             $dataAccuLocation = (object)[];
+            $dataAccuLocation->id = $maccuratelocation->id;
             $dataAccuLocation->category_name = $maccuratelocation->category_name;
             $dataAccuLocation->status = $maccuratelocation->status;
             $dataAccuLocation->operatorid = $maccuratelocation->operatorid;
