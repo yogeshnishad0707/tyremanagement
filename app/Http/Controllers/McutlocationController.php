@@ -15,6 +15,7 @@ class McutlocationController extends Controller
         $transCutLocation = [];
         foreach ($mcutlocations as $mcutlocation) {
             $datacutlocation = (object)[];
+            $datacutlocation->id = $mcutlocation->id;
             $datacutlocation->category_name = $mcutlocation->category_name;
             $datacutlocation->status = $mcutlocation->status;
             $datacutlocation->operatorid = $mcutlocation->operatorid;

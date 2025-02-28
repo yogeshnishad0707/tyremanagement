@@ -15,6 +15,7 @@ class MntccutController extends Controller
         $transNtcCut = [];
         foreach ($mntccuts as $mntccut) {
             $datantccut = (object)[];
+            $datantccut->id = $mntccut->id;
             $datantccut->category_name = $mntccut->category_name;
             $datantccut->status = $mntccut->status;
             $datantccut->operatorid = $mntccut->operatorid;

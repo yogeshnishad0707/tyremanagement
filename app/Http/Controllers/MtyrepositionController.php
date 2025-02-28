@@ -15,6 +15,7 @@ class MtyrepositionController extends Controller
         $transTyrePosition = [];
         foreach ($mtyrepositions as $mtyreposition) {
             $datatyreposition = (object)[];
+            $datatyreposition->id = $mtyreposition->id;
             $datatyreposition->category_name = $mtyreposition->category_name;
             $datatyreposition->status = $mtyreposition->status;
             $datatyreposition->operatorid = $mtyreposition->operatorid;

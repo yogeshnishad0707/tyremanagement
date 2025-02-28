@@ -15,6 +15,7 @@ class MtruckmakeController extends Controller
         $transTruckMake = [];
         foreach ($mtruckmakes as $mtruckmake) {
             $datatruckmake = (object)[];
+            $datatruckmake->id = $mtruckmake->id;
             $datatruckmake->category_name = $mtruckmake->category_name;
             $datatruckmake->status = $mtruckmake->status;
             $datatruckmake->operatorid = $mtruckmake->operatorid;
