@@ -19,6 +19,7 @@ class MtyrepositionController extends Controller
             $datatyreposition->category_name = $mtyreposition->category_name;
             $datatyreposition->status = $mtyreposition->status;
             $datatyreposition->operatorid = $mtyreposition->operatorid;
+            $datatyreposition->page_name = 'TyrePosition';
             $transTyrePosition[] = $datatyreposition;
         }
         return response()->json($transTyrePosition);

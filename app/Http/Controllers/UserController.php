@@ -4,12 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\PasswordReset;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\Resetpassword;
+use Carbon\Carbon;
 
 Cache::flush();
 
@@ -234,7 +240,7 @@ class UserController extends Controller
     // }
 
     public function getUserByRoleId(Request $request)
-    { 
+    {
         // return $request;die;
         $role_id = $request->query('role_id');
         $parent_id = $request->query('parent_id');
@@ -245,22 +251,22 @@ class UserController extends Controller
         if (!$parent_id) {
             return response()->json(["Status" => false, "success" => 0, "errors" => "Invalid Parent Id!!"]);
         }
-        
+
         $users = DB::table('users')
             ->select('users.*')
             ->where('role_id', $role_id)
             ->where('parent_id', $parent_id)
             ->orderBy('id', 'Asc')
             ->get();
-            
+
         if ($users->isEmpty()) {
             return response()->json(["Status" => false, "success" => 0, "errors" => "No data found."]);
         }
 
         $arrayObj = [];
         foreach ($users as $user) {
-            $rolename = getval('roles','id',$user->role_id,'name');
-            $parentname = getval('roles','id',$user->parent_id,'name');
+            $rolename = getval('roles', 'id', $user->role_id, 'name');
+            $parentname = getval('roles', 'id', $user->parent_id, 'name');
             $dataObje = new \stdClass();
             $dataObje->role_id = $rolename;
             $dataObje->parent_id = $parentname;
@@ -268,7 +274,7 @@ class UserController extends Controller
             $dataObje->mobile_no = $user->mobile_no;
             $dataObje->email = $user->email;
             $dataObje->address = $user->address;
-            
+
             $arrayObj[] = $dataObje;
         }
         return response()->json(["Status" => true, "success" => 1, "data" => ['posts' => $arrayObj], "msg" => "User List"]);
@@ -324,7 +330,7 @@ class UserController extends Controller
         foreach ($users as $user) {
             $rolename = getval('roles', 'id', $user->role_id, 'name');
             $parentname = getval('roles', 'id', $user->parent_id, 'name');
-            
+
             $dataObj = new \stdClass();
             $dataObj->role_id = $rolename;
             $dataObj->parent_id = $parentname;
@@ -344,24 +350,110 @@ class UserController extends Controller
         ]);
     }
 
-    // public function sendRentLinkEmail(Request $request)
+    public function resetPasswordEmail(Request $request)
+    {
+        try {
+            $user = User::where('email', $request->email)->get();
+            if (count($user) > 0) {
+                $token = Str::random(40);
+                $domain = URL::to('/');
+                $url = $domain . '/api/resetPasswordForm?token=' . $token;
+                $confirmed = [
+                    'url' => $url,
+                    'email' => $request->email,
+                    'title' => 'Password Reset!!',
+                    'body'  => 'Please Click Below Link To Reset Password.',
+                ];
+                // $data['url'] = $url;
+                // $data['email'] = $request->email;
+                // $data['title'] = 'Password Reset!!';
+                // $data['body']  = 'Please Click Below Link To Reset Password.';
+                Mail::to($request->email)->send(new Resetpassword($confirmed));
+                // Mail::send('sendresetpassword',['data'=>$data],function($message) use ($data){
+                //     $message->to($data['email'])->subject($data['title']);
+                // });
+                $datetime = Carbon::now()->format('Y-m-d H:i:s');
+                PasswordReset::updateOrCreate(
+                    ['email' => $request->email],
+                    [
+                        'email' => $request->email,
+                        'token' => $token,
+                        'created_at' => $datetime,
+                    ]
+                );
+                return response()->json(['success' => true, 'msg' => 'Please Check Your Email Id!!!']);
+            } else {
+                return response()->json(['success' => false, 'msg' => 'User Email Not Found!!']);
+            }
+        } catch (\Exception $ex) {
+            return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
+        }
+    }
+
+    public function resetPasswordForm(Request $request)
+    {
+        // $resetData = PasswordReset::where('email',$request->email)->get();
+        // $emailid =  $resetData->email;
+        $Resetassword_Count_Row = DB::table('password_reset_tokens')
+            ->selectRaw('COUNT(*) as total')
+            ->where('token', $request->token)
+            ->get();
+        $totalCount = $Resetassword_Count_Row[0]->total;
+        if ($totalCount > 0) {
+            $Resetassword = DB::table('password_reset_tokens')
+                ->select('password_reset_tokens.*')
+                ->where("token", $request->token)->get();
+            $emailid = $Resetassword[0]->email;
+
+            $User_Count_Row = DB::table('users')
+                ->selectRaw('COUNT(*) as total')
+                ->where('email', $emailid)
+                ->get();
+            $userCount = $User_Count_Row[0]->total;
+            if ($userCount > 0) {
+
+                $UserData = DB::table('users')
+                    ->select('users.*')
+                    ->where("email", $emailid)->get();
+                $emailid = $Resetassword[0]->email;
+                $msg = $UserData[0]->id;
+            } else {
+                $msg = "Record not found or link expireed!";
+            }
+        } else {
+            $msg = 'Link expired!';
+        }
+        return response()->json($msg);
+        // if(isset($request->token) && count($resetData)>0){
+        //     $user = User::where('email', $resetData[0]['email'])->get();
+        //     // return view('resetPassword',compact('user'));
+        // }else{
+        //     return "404";
+        // }
+    }
+
+    // public function passwordresent(Request $request)
     // {
-    //     // Validate the email
-    //     // return $request;
-    //     $request->validate(['email' => 'required|email']);
-    //     // Send the rent reset link
-    //     $status = Password::sendRentLink($request->only('email'));
-    //     // Check if the reset link was sent successfully
-    //     if ($status === Password::RESET_LINK_SENT) {
-    //         return response()->json(['message' => $status], 200);
+    //     $resetData = PasswordReset::where('token',$request->token)->get();
+
+    //     if(isset($request->token) && count($resetData)>0){
+    //         $user = User::where('email', $resetData[0]['email'])->get();
+    //         return view('resetPassword',compact('user'));
+    //     }else{
+    //         return "404";
     //     }
-    //     // If something goes wrong, return an error response
-    //     return response()->json(['message' => 'Failed to send reset link. Please try again.'], 500);
     // }
 
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'password' => 'required|string|min:6|confirmed',
+        ]);
 
-    // public function resetPassword(Request $request)
-    // {
-    //     return $request;
-    // }
+        $user = User::find($request->id);
+        $user->password = Hash::make($request->password);
+        $user->save();
+        PasswordReset::where('email', $user->email)->delete();
+        return "Your Password Change Successfully!!!";
+    }
 }

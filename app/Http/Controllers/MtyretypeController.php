@@ -22,6 +22,7 @@ class MtyretypeController extends Controller
             $datatyretype->category_name = $mtyretype->category_name;
             $datatyretype->status = $mtyretype->status;
             $datatyretype->operatorid = $mtyretype->operatorid;
+            $datatyretype->page_name ='TyreType';
             $transTyreType[] = $datatyretype;
         }
         return response()->json($transTyreType);

@@ -125,7 +125,7 @@ class TyreinfoController extends Controller
 
     public function gettyresize(){
         // return "okk";die;
-        $mtyresizes = Mtyresize::orderBy('id','desc')->get(); 
+        $mtyresizes = Mtyresize::where('status','1')->orderBy('id','desc')->get(); 
 
         // if ($mtruckmakes->isEmpty()) {
         //     return response()->json(['error' => 'No Truck Make Found.'], 404);

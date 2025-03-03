@@ -22,6 +22,7 @@ class MtypesizeController extends Controller
             $datatyresize->category_name = $mtyresize->category_name;
             $datatyresize->status = $mtyresize->status;
             $datatyresize->operatorid = $mtyresize->operatorid;
+            $datatyresize->page_name = 'TyreTypeSize';
             $transTyreSize[] = $datatyresize;
         }
         return response()->json($transTyreSize);
@@ -105,7 +106,7 @@ class MtypesizeController extends Controller
 
     public function gettyretype(){
         // return "okk";die;
-        $mtyretypes = Mtyretype::orderBy('id','desc')->get(); 
+        $mtyretypes = Mtyretype::where('status','1')->orderBy('id','desc')->get(); 
 
         if ($mtyretypes->isEmpty()) {
             return response()->json(['error' => 'No Tyre Type found.'], 404);

@@ -29,12 +29,6 @@ class RoleSeeder extends Seeder
                 'updated_at'=>now(),
             ],
             [
-                'name' => 'operator',
-                'guard_name' => 'web',
-                'created_at' => now(),
-                'updated_at'=>now(),
-            ],
-            [
                 'name' => 'user',
                 'guard_name' => 'web',
                 'created_at' => now(),

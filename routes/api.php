@@ -18,6 +18,7 @@ use App\Http\Controllers\MtstypeController;
 use App\Http\Controllers\SiteproController;
 use App\Http\Controllers\TyreinfoController;
 use App\Http\Controllers\TyresizeinfoController;
+use App\Http\Controllers\CheckstatusController;
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
@@ -30,7 +31,8 @@ Route::post('logout', [AuthController::class, 'logout']);
 // Route::post('/logout', [AuthController::class, 'logout'])
 Route::get('get_req', [UserController::class, 'index']);
 
-Route::post('sendRentLinkEmail', [UserController::class, 'sendRentLinkEmail']);
+Route::post('resetPasswordEmail', [UserController::class, 'resetPasswordEmail']);
+Route::get('resetPasswordForm', [UserController::class, 'resetPasswordForm']);
 Route::post('resetPassword', [UserController::class, 'resetPassword']);
 
 // Route::middleware('auth.token')->group(function () {
@@ -48,6 +50,7 @@ Route::middleware([TokenAuth::class])->group(function () {
     Route::resource('permissionmaipping', PermissionmaippingController::class);
     Route::get('getpagename', [PermissionmaippingController::class, 'getpagename']);
     Route::get('getcategory', [PermissionmaippingController::class, 'getcategory']);
+    Route::post('checkstatus', [CheckstatusController::class, 'checkstatus']);
     Route::resource('mtyretype', MtyretypeController::class);
     Route::put('updatetyretype/{id}', [MtyretypeController::class, 'updatetyretype']);
     Route::delete('deletetyretype/{id}', [MtyretypeController::class, 'deletetyretype']);

@@ -47,11 +47,11 @@ class PermissionmaippingController extends Controller
             $permissionMappings = [];
             foreach ($page_names as $pagename) {
                 // foreach ($permissioncat_ids as $permissioncat_id) {
-                    $permissionMapping = new Permissionmaipping();
-                    $permissionMapping->userid = $request->userid;
-                    $permissionMapping->pageid = $pagename;
-                    $permissionMapping->permissioncat_id = json_encode($permissioncat_ids); // Store as a JSON array
-                    $permissionMappings[] = $permissionMapping;
+                $permissionMapping = new Permissionmaipping();
+                $permissionMapping->userid = $request->userid;
+                $permissionMapping->pageid = $pagename;
+                $permissionMapping->permissioncat_id = json_encode($permissioncat_ids); // Store as a JSON array
+                $permissionMappings[] = $permissionMapping;
                 // }
             }
             Permissionmaipping::insert(
@@ -87,32 +87,38 @@ class PermissionmaippingController extends Controller
      */
     public function update(Request $request, Permissionmaipping $permissionmaipping)
     {
-        // return $request;
-        $permissioncat_ids = explode(',', $request->permissioncat_id); // Explode the string into an array
+        $permissioncat_ids = explode(',', $request->permissioncat_id); 
         $page_names = explode(',', $request->pageid);
 
         try {
             $permissionMappings = [];
             foreach ($page_names as $pagename) {
-                // foreach ($permissioncat_ids as $permissioncat_id) {
+                $existingMapping = Permissionmaipping::where('userid', $request->userid)
+                                                    ->first();
+                if ($existingMapping) {
+                    $existingMapping->permissioncat_id = $pagename;
+                    $existingMapping->permissioncat_id = json_encode($permissioncat_ids); 
+                    $permissionMappings[] = $existingMapping; 
+                } else {
                     $permissionMapping = new Permissionmaipping();
-                    $permissionMapping->userid = $request->userid;
-                    $permissionMapping->pageid = $pagename;
-                    $permissionMapping->permissioncat_id = json_encode($permissioncat_ids); // Store as a JSON array
+                    $permissionMapping->userid = $request->userid;  
+                    $permissionMapping->pageid = $pagename;  
+                    $permissionMapping->permissioncat_id = json_encode($permissioncat_ids); 
+                    
                     $permissionMappings[] = $permissionMapping;
-                // }
+                }
             }
-            Permissionmaipping::insert(
-                array_map(function ($permissionMapping) {
-                    return $permissionMapping->getAttributes();
-                }, $permissionMappings)
-            );
-            return response()->json(['message' => 'Permission Mappings Added successfully!']);
+            foreach ($permissionMappings as $permissionMapping) {
+                $permissionMapping->save();
+            }
+
+            return response()->json(['message' => 'Permission Mappings updated successfully!']);
         } catch (\Exception $ex) {
-            return $ex;
-            return response()->json(['Status' => false, 'success' => 0, 'msg' => 'Permission Mapping Not Added. Failed!', 'error' => $ex->getMessage()]);
+            return response()->json(['Status' => false, 'success' => 0, 'msg' => 'Permission Mapping Not Updated. Failed!', 'error' => $ex->getMessage()]);
         }
     }
+
+
 
     /**
      * Remove the specified resource from storage.
@@ -122,28 +128,30 @@ class PermissionmaippingController extends Controller
         //
     }
 
-    public function getpagename(){
-        $pages = Pageinfo::orderBy('id','asc')->get();
+    public function getpagename()
+    {
+        $pages = Pageinfo::orderBy('id', 'asc')->get();
         // return $pages;
         $transForm = [];
         foreach ($pages as $page) {
             $dataobject = (object)[];
             $dataobject->id =  $page->id;
             $dataobject->pagename =  $page->pagename;
-            $transForm[]=$dataobject;
+            $transForm[] = $dataobject;
         }
         return response()->json($transForm);
     }
 
-    public function getcategory(){
-        $pagecates = Permissioncategory::orderBy('id','asc')->get();
+    public function getcategory()
+    {
+        $pagecates = Permissioncategory::orderBy('id', 'asc')->get();
         // return $pages;
         $transForm = [];
         foreach ($pagecates as $page) {
             $dataobject = (object)[];
             $dataobject->id =  $page->id;
             $dataobject->pc_name =  $page->pc_name;
-            $transForm[]=$dataobject;
+            $transForm[] = $dataobject;
         }
         return response()->json($transForm);
     }

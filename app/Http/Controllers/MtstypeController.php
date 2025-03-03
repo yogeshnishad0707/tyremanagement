@@ -19,6 +19,7 @@ class MtstypeController extends Controller
             $datatstype->category_name = $mtstype->category_name;
             $datatstype->status = $mtstype->status;
             $datatstype->operatorid = $mtstype->operatorid;
+            $datatstype->page_name = 'TyreStatusType';
             $transTStype[] = $datatstype;
         }
         return response()->json($transTStype);
@@ -95,4 +96,5 @@ class MtstypeController extends Controller
             return response()->json($err);
         }
     }
+
 }
