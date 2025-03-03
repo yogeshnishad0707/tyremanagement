@@ -19,6 +19,7 @@ class McutlocationController extends Controller
             $datacutlocation->category_name = $mcutlocation->category_name;
             $datacutlocation->status = $mcutlocation->status;
             $datacutlocation->operatorid = $mcutlocation->operatorid;
+            $datacutlocation->page_name = 'CutLocation';
             $transCutLocation[] = $datacutlocation;
         }
         return response()->json($transCutLocation);

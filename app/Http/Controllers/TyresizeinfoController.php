@@ -35,6 +35,9 @@ class TyresizeinfoController extends Controller
             $dataTyreSiteInfo->fitmandate = $tyresiteinfo->fitmandate;
             $dataTyreSiteInfo->removaldate = $tyresiteinfo->removaldate;
             $dataTyreSiteInfo->replacedate = $tyresiteinfo->replacedate;
+            $dataTyreSiteInfo->front_life = $tyresiteinfo->front_life;
+            $dataTyreSiteInfo->rear_life = $tyresiteinfo->rear_life;
+            $dataTyreSiteInfo->repair_life = $tyresiteinfo->repair_life;
             $dataTyreSiteInfo->curr_status = $tyresiteinfo->curr_status;
             $dataTyreSiteInfo->remark = $tyresiteinfo->remark;
             $dataTyreSiteInfo->status = $tyresiteinfo->status;
@@ -73,6 +76,9 @@ class TyresizeinfoController extends Controller
         $tyresizeinfos->fitmandate = $request->fitmandate;
         $tyresizeinfos->removaldate = $request->removaldate;
         $tyresizeinfos->replacedate = $request->replacedate;
+        $tyresizeinfos->front_life = $request->front_life;
+        $tyresizeinfos->rear_life = $request->rear_life;
+        $tyresizeinfos->repair_life = $request->repair_life;
         $tyresizeinfos->curr_status = $request->curr_status;
         $tyresizeinfos->remark = $request->remark;
         $tyresizeinfos->status = $request->status;
@@ -122,6 +128,9 @@ class TyresizeinfoController extends Controller
                 'fitmandate'=> $request->fitmandate,
                 'removaldate'=> $request->removaldate,
                 'replacedate'=> $request->replacedate,
+                'front_life'=> $request->front_life,
+                'rear_life'=> $request->rear_life,
+                'repair_life'=> $request->repair_life,
                 'curr_status'=> $request->curr_status,
                 'remark'=> $request->remark,
                 'status'=> $request->status,
@@ -167,7 +176,7 @@ class TyresizeinfoController extends Controller
     public function gettruckmodel()
     {
         // return "okk";die;
-        $mtruckmodels = Mtruckmodel::orderBy('id','desc')->get(); 
+        $mtruckmodels = Mtruckmodel::where('status','1')->orderBy('id','desc')->get(); 
 
         $transTruckModel = [];
         foreach ($mtruckmodels as $truckmodel) {
@@ -197,7 +206,7 @@ class TyresizeinfoController extends Controller
     public function gettyreposition()
     {
         // return "okk";die;
-        $mtyrepositions = Mtyreposition::orderBy('id','desc')->get(); 
+        $mtyrepositions = Mtyreposition::where('status','1')->orderBy('id','desc')->get(); 
 
         $transTyrePosition = [];
         foreach ($mtyrepositions as $tyreposition) {

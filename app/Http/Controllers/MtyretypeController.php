@@ -12,22 +12,21 @@ class MtyretypeController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-{
-    $mtyretypes = Mtyretype::orderBy('id', 'desc')->get();
+    {
+        $mtyretypes = Mtyretype::orderBy('id', 'desc')->get();
 
-    $transTyreType = [];
-    foreach ($mtyretypes as $mtyretype) {
-        $datatyretype = (object)[];
-        $datatyretype->id = $mtyretype->id;
-        $datatyretype->category_name = $mtyretype->category_name;
-        $datatyretype->status = $mtyretype->status;  // No need for the if-else logic
-        $datatyretype->operatorid = $mtyretype->operatorid;
-        $datatyretype->page_name = 'TyreType';
-        $transTyreType[] = $datatyretype;
+        $transTyreType = [];
+        foreach ($mtyretypes as $mtyretype) {
+            $datatyretype = (object)[];
+            $datatyretype->id = $mtyretype->id;
+            $datatyretype->category_name = $mtyretype->category_name;
+            $datatyretype->status = $mtyretype->status;  // No need for the if-else logic
+            $datatyretype->operatorid = $mtyretype->operatorid;
+            $datatyretype->page_name = 'TyreType';
+            $transTyreType[] = $datatyretype;
+            }
+        return response()->json($transTyreType);
     }
-
-    return response()->json($transTyreType);
-}
 
 
     /**
@@ -163,3 +162,4 @@ class MtyretypeController extends Controller
 
 
 }
+

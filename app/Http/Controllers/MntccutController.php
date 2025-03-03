@@ -19,6 +19,7 @@ class MntccutController extends Controller
             $datantccut->category_name = $mntccut->category_name;
             $datantccut->status = $mntccut->status;
             $datantccut->operatorid = $mntccut->operatorid;
+            $datantccut->page_name = 'Ntc&Tc';
             $transNtcCut[] = $datantccut;
         }
         return response()->json($transNtcCut);

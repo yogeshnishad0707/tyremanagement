@@ -19,6 +19,7 @@ class MtruckmakeController extends Controller
             $datatruckmake->category_name = $mtruckmake->category_name;
             $datatruckmake->status = $mtruckmake->status;
             $datatruckmake->operatorid = $mtruckmake->operatorid;
+            $datatruckmake->page_name ='TruckMake';
             $transTruckMake[] = $datatruckmake;
         }
         return response()->json($transTruckMake);
@@ -92,4 +93,5 @@ class MtruckmakeController extends Controller
             return response()->json($err);
         }
     }
+
 }

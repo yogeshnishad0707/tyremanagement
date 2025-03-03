@@ -19,6 +19,7 @@ class MacculocationController extends Controller
             $dataAccuLocation->category_name = $maccuratelocation->category_name;
             $dataAccuLocation->status = $maccuratelocation->status;
             $dataAccuLocation->operatorid = $maccuratelocation->operatorid;
+            $dataAccuLocation->page_name = 'AccurateLocation';
             $transAccurateLocation[] = $dataAccuLocation;
         }
         return response()->json($transAccurateLocation);

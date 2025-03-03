@@ -22,6 +22,7 @@ class MtruckmodelController extends Controller
             $datatruckmodel->category_name = $mtruckmodel->category_name;
             $datatruckmodel->status = $mtruckmodel->status;
             $datatruckmodel->operatorid = $mtruckmodel->operatorid;
+            $datatruckmodel->page_name = 'TruckModel';
             $transTruckModel[] = $datatruckmodel;
         }
         return response()->json($transTruckModel);
@@ -105,7 +106,7 @@ class MtruckmodelController extends Controller
 
     public function gettruckmake(){
         // return "okk";die;
-        $mtruckmakes = Mtruckmake::orderBy('id','desc')->get(); 
+        $mtruckmakes = Mtruckmake::where('status','1')->orderBy('id','desc')->get(); 
 
         if ($mtruckmakes->isEmpty()) {
             return response()->json(['error' => 'No Truck Make Found.'], 404);
@@ -116,6 +117,7 @@ class MtruckmodelController extends Controller
             $datatruckmake = (object)[];
             $datatruckmake->id = $mtruckmake->id;
             $datatruckmake->category_name = $mtruckmake->category_name;
+            // $datatruckmake->operatorid = $mtruckmake->operatorid;
             $transTruckMake[] = $datatruckmake;
         }
         return response()->json($transTruckMake);
