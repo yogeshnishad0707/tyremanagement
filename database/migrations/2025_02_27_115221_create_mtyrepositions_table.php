@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('mtyrepositions', function (Blueprint $table) {
             $table->id();
+            $table->string('type')->nullable();
             $table->string('category_name')->nullable();
             $table->enum('status',['0','1'])->default('1');
             $table->unsignedBigInteger('operatorid')->nullable();
