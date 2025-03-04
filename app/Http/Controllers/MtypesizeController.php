@@ -106,7 +106,25 @@ class MtypesizeController extends Controller
 
     public function gettyretype(){
         // return "okk";die;
-        $mtyretypes = Mtyretype::where('status','1')->orderBy('id','desc')->get(); 
+        $mtyretypes = Mtyretype::where('status','1')->orderBy('id','desc')->get();
+
+        if ($mtyretypes->isEmpty()) {
+            return response()->json(['error' => 'No Tyre Type found.'], 404);
+        }
+
+        $transTyreType = [];
+        foreach ($mtyretypes as $mtyretype) {
+            $datatyretype = (object)[];
+            $datatyretype->id = $mtyretype->id;
+            $datatyretype->category_name = $mtyretype->category_name;
+            $transTyreType[] = $datatyretype;
+        }
+        return response()->json($transTyreType);
+    }
+
+    public function gettyretypeById(Request $request){
+        // return "okk";die;
+        $mtyretypes = Mtyretype::where('id',$request->id)->get();
 
         if ($mtyretypes->isEmpty()) {
             return response()->json(['error' => 'No Tyre Type found.'], 404);

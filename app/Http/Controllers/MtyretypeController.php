@@ -141,24 +141,25 @@ class MtyretypeController extends Controller
     }
 
 
-    public function checkstatus(Request $request) {
-    if (!$request->has('id') || !$request->has('status')) {
-        return response()->json(['Status' => false, 'success' => 0, 'msg' => 'ID and Status are required!']);
-    }
+//     public function checkstatus(Request $request) {
+//     // if (!$request->has('id') || !$request->has('status')) {
+//     //     return response()->json(['Status' => false, 'success' => 0, 'msg' => 'ID and Status are required!']);
+//     // }
 
-    try {
-        $checkstatus = Mtyretype::findOrFail($request->id);
+//     // try {
+//     //     $checkstatus = Mtyretype::findOrFail($request->id);
 
-        // Update the status based on the passed value
-        $checkstatus->update([
-            'status' => $request->status,  // Dynamically set status from the request
-        ]);
+//     //     // Update the status based on the passed value
+//     //     $checkstatus->update([
+//     //         'status' => $request->status,  // Dynamically set status from the request
+//     //     ]);
 
-        return response()->json(['message' => 'Status Updated Successfully!']);
-    } catch (\Exception $ex) {
-        return response()->json(['Status' => false, 'success' => 0, 'msg' => 'Status Not Updated!', 'error' => $ex->getMessage()]);
-    }
-}
+//     //     return response()->json(['message' => 'Status Updated Successfully!']);
+//     // } catch (\Exception $ex) {
+//     //     return response()->json(['Status' => false, 'success' => 0, 'msg' => 'Status Not Updated!', 'error' => $ex->getMessage()]);
+//     // }
+
+// }
 
 
 }

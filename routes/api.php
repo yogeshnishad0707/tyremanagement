@@ -106,5 +106,5 @@ Route::middleware([TokenAuth::class])->group(function () {
     Route::get('gettruckmodel', [TyresizeinfoController::class, 'gettruckmodel']);
     Route::get('gettyreinfo', [TyresizeinfoController::class, 'gettyreinfo']);
     Route::get('gettyreposition', [TyresizeinfoController::class, 'gettyreposition']);
-    Route::post('checkstatus', [MtyretypeController::class, 'checkstatus']);
+     Route::get('gettyretypeById', [MtyretypeController::class, 'gettyretypeById']);
 });
