@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Tyresizeinfo extends Model
+class Repairinfo extends Model
 {
     protected $guarded = [];
 }

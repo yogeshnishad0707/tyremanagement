@@ -3,21 +3,21 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Tyresizeinfo;
+use App\Models\Tyresiteinfos;
 use App\Models\Siteproject;
 use App\Models\Mtruckmodel;
 use App\Models\Tyreinformation;
 use App\Models\Mtyreposition;
 use Illuminate\Support\Facades\Validator;
 
-class TyresizeinfoController extends Controller
+class TyresiteinfoController extends Controller
 {
     public function tyresitelist()
     {
-        $tyresizeinfos = Tyresizeinfo::orderBy('id','desc')->get();
+        $tyresiteinfos = Tyresiteinfos::orderBy('id','desc')->get();
 
         $transTyreSite = [];
-        foreach ($tyresizeinfos as $tyresiteinfo) {
+        foreach ($tyresiteinfos as $tyresiteinfo) {
             $projectname = getval('siteprojects','id',$tyresiteinfo->project_id,'project_name');
             $truckmodel = getval('mtruckmodels','id',$tyresiteinfo->truck_modal_id,'category_name');
             $tyreinfo = getval('tyreinformations','id',$tyresiteinfo->tyre_info_id,'make');
@@ -65,33 +65,33 @@ class TyresizeinfoController extends Controller
         }
 
         // Create a new tyre site entry
-        $tyresizeinfos = new Tyresizeinfo();
-        $tyresizeinfos->project_id = $request->project_id;
-        $tyresizeinfos->truck_modal_id = $request->truck_modal_id;
-        $tyresizeinfos->tyre_info_id = $request->tyre_info_id;
-        $tyresizeinfos->position_id = $request->position_id;
-        $tyresizeinfos->ponumber = $request->ponumber;
-        $tyresizeinfos->truck_no = $request->truck_no;
-        $tyresizeinfos->otl = $request->otl;
-        $tyresizeinfos->fitmandate = $request->fitmandate;
-        $tyresizeinfos->removaldate = $request->removaldate;
-        $tyresizeinfos->replacedate = $request->replacedate;
-        $tyresizeinfos->front_life = $request->front_life;
-        $tyresizeinfos->rear_life = $request->rear_life;
-        $tyresizeinfos->repair_life = $request->repair_life;
-        $tyresizeinfos->curr_status = $request->curr_status;
-        $tyresizeinfos->remark = $request->remark;
-        $tyresizeinfos->status = $request->status;
-        $tyresizeinfos->operatorid = $request->operatorid;
+        $tyresiteinfos = new Tyresiteinfos();
+        $tyresiteinfos->project_id = $request->project_id;
+        $tyresiteinfos->truck_modal_id = $request->truck_modal_id;
+        $tyresiteinfos->tyre_info_id = $request->tyre_info_id;
+        $tyresiteinfos->position_id = $request->position_id;
+        $tyresiteinfos->ponumber = $request->ponumber;
+        $tyresiteinfos->truck_no = $request->truck_no;
+        $tyresiteinfos->otl = $request->otl;
+        $tyresiteinfos->fitmandate = $request->fitmandate;
+        $tyresiteinfos->removaldate = $request->removaldate;
+        $tyresiteinfos->replacedate = $request->replacedate;
+        $tyresiteinfos->front_life = $request->front_life;
+        $tyresiteinfos->rear_life = $request->rear_life;
+        $tyresiteinfos->repair_life = $request->repair_life;
+        $tyresiteinfos->curr_status = $request->curr_status;
+        $tyresiteinfos->remark = $request->remark;
+        $tyresiteinfos->status = $request->status;
+        $tyresiteinfos->operatorid = $request->operatorid;
 
-        $existingTyreSiteiInfo = Tyresizeinfo::where('ponumber', $tyresizeinfos->ponumber)->first();
+        $existingTyreSiteiInfo = Tyresiteinfos::where('ponumber', $tyresiteinfos->ponumber)->first();
         if ($existingTyreSiteiInfo) {
             // Handle duplicate Email Id
             $obj = ["Status" => false, "success" => 0, "errors" => 'The P.O. Number has already been taken.'];
             return response()->json($obj);
         }
         try {
-            $tyresizeinfos->save();
+            $tyresiteinfos->save();
             return response()->json(['message' => 'Tyre Site Info Added successfully!']);
         } catch (\Exception $ex) {
             return $ex;
@@ -116,8 +116,8 @@ class TyresizeinfoController extends Controller
             return response()->json($val);
         }
         try {
-            $tyresizeinfos = Tyresizeinfo::findOrFail($id);
-            $tyresizeinfos->update([
+            $tyresiteinfos = Tyresiteinfos::findOrFail($id);
+            $tyresiteinfos->update([
                 'project_id'=> $request->project_id,
                 'truck_modal_id'=> $request->truck_modal_id,
                 'tyre_info_id'=> $request->tyre_info_id,
@@ -148,8 +148,8 @@ class TyresizeinfoController extends Controller
     {
         // return "ok";die;
         try {
-            $tyresizeinfos = Tyresizeinfo::findOrFail($id);
-            $tyresizeinfos->delete();
+            $tyresiteinfos = Tyresiteinfos::findOrFail($id);
+            $tyresiteinfos->delete();
             return response()->json(['message'=>'Tyre Site Info Deleted SuccessFully!!']);
         } catch (\Exception $ex) {
             return $ex;

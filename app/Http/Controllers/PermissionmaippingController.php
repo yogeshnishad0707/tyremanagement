@@ -14,8 +14,8 @@ class PermissionmaippingController extends Controller
      */
     public function getus()
     {
-        return "hello";
-        die;
+        // return "hello";
+        // die;
         //$users = User::where('role_id', $roleid)->get();
         // return $users;
         // die;

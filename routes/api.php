@@ -17,8 +17,9 @@ use App\Http\Controllers\MntccutController;
 use App\Http\Controllers\MtstypeController;
 use App\Http\Controllers\SiteproController;
 use App\Http\Controllers\TyreinfoController;
-use App\Http\Controllers\TyresizeinfoController;
+use App\Http\Controllers\TyresiteinfoController;
 use App\Http\Controllers\CheckstatusController;
+use App\Http\Controllers\TyresizeinfoController;
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
@@ -107,4 +108,15 @@ Route::middleware([TokenAuth::class])->group(function () {
     Route::get('gettyreinfo', [TyresizeinfoController::class, 'gettyreinfo']);
     Route::get('gettyreposition', [TyresizeinfoController::class, 'gettyreposition']);
      Route::get('gettyretypeById', [MtyretypeController::class, 'gettyretypeById']);
+    Route::get('tyresitelist', [TyresiteinfoController::class, 'tyresitelist']);
+    Route::post('inserttyresiteinfo', [TyresiteinfoController::class, 'inserttyresiteinfo']);
+    Route::put('updatetyresiteinfo/{id}', [TyresiteinfoController::class, 'updatetyresiteinfo']);
+    Route::delete('deletetyresiteinfo/{id}', [TyresiteinfoController::class, 'deletetyresiteinfo']);
+    Route::get('getsiteproject', [TyresiteinfoController::class, 'getsiteproject']);
+    Route::get('gettruckmodel', [TyresiteinfoController::class, 'gettruckmodel']);
+    Route::get('gettyreinfo', [TyresiteinfoController::class, 'gettyreinfo']);
+    Route::get('gettyreposition', [TyresiteinfoController::class, 'gettyreposition']);
+
+    Route::get('gettyretypeByid', [MtypesizeController::class, 'gettyretypeByid']);
+
 });
