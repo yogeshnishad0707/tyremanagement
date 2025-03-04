@@ -94,6 +94,7 @@ Route::middleware([TokenAuth::class])->group(function () {
     Route::delete('deletesiteproject/{id}', [SiteproController::class, 'deletesiteproject']);
     Route::get('getsitename', [SiteproController::class, 'getsitename']);
     Route::get('tyreinfolist', [TyreinfoController::class, 'tyreinfolist']);
+
     Route::post('inserttyreinfo', [TyreinfoController::class, 'inserttyreinfo']);
     Route::put('updatetyreinfo/{id}', [TyreinfoController::class, 'updatetyreinfo']);
     Route::delete('deletetyreinfo/{id}', [TyreinfoController::class, 'deletetyreinfo']);
