@@ -32,7 +32,7 @@ return new class extends Migration
             $table->string('operatorid')->nullable();
             $table->timestamps();
 
-            // add foreign key 
+            // add foreign key
             $table->foreign('project_id')->references('id')->on('siteprojects')->onDelete('cascade');
             $table->foreign('truck_modal_id')->references('id')->on('mtruckmodels')->onDelete('cascade');
             $table->foreign('tyre_info_id')->references('id')->on('tyreinformations')->onDelete('cascade');

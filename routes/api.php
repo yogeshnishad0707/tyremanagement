@@ -19,7 +19,6 @@ use App\Http\Controllers\SiteproController;
 use App\Http\Controllers\TyreinfoController;
 use App\Http\Controllers\TyresiteinfoController;
 use App\Http\Controllers\CheckstatusController;
-use App\Http\Controllers\TyresizeinfoController;
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
@@ -99,15 +98,6 @@ Route::middleware([TokenAuth::class])->group(function () {
     Route::put('updatetyreinfo/{id}', [TyreinfoController::class, 'updatetyreinfo']);
     Route::delete('deletetyreinfo/{id}', [TyreinfoController::class, 'deletetyreinfo']);
     Route::get('gettyresize', [TyreinfoController::class, 'gettyresize']);
-    Route::get('tyresitelist', [TyresizeinfoController::class, 'tyresitelist']);
-    Route::post('inserttyresiteinfo', [TyresizeinfoController::class, 'inserttyresiteinfo']);
-    Route::put('updatetyresiteinfo/{id}', [TyresizeinfoController::class, 'updatetyresiteinfo']);
-    Route::delete('deletetyresiteinfo/{id}', [TyresizeinfoController::class, 'deletetyresiteinfo']);
-    Route::get('getsiteproject', [TyresizeinfoController::class, 'getsiteproject']);
-    Route::get('gettruckmodel', [TyresizeinfoController::class, 'gettruckmodel']);
-    Route::get('gettyreinfo', [TyresizeinfoController::class, 'gettyreinfo']);
-    Route::get('gettyreposition', [TyresizeinfoController::class, 'gettyreposition']);
-     Route::get('gettyretypeById', [MtyretypeController::class, 'gettyretypeById']);
     Route::get('tyresitelist', [TyresiteinfoController::class, 'tyresitelist']);
     Route::post('inserttyresiteinfo', [TyresiteinfoController::class, 'inserttyresiteinfo']);
     Route::put('updatetyresiteinfo/{id}', [TyresiteinfoController::class, 'updatetyresiteinfo']);
@@ -116,7 +106,5 @@ Route::middleware([TokenAuth::class])->group(function () {
     Route::get('gettruckmodel', [TyresiteinfoController::class, 'gettruckmodel']);
     Route::get('gettyreinfo', [TyresiteinfoController::class, 'gettyreinfo']);
     Route::get('gettyreposition', [TyresiteinfoController::class, 'gettyreposition']);
-
-    Route::get('gettyretypeByid', [MtypesizeController::class, 'gettyretypeByid']);
-
+     Route::get('gettyretypeById', [MtypesizeController::class, 'gettyretypeById']);
 });

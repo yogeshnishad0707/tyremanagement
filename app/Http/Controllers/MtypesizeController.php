@@ -14,12 +14,17 @@ class MtypesizeController extends Controller
     {
         $mtyresizes = Mtyresize::orderBy('id', 'desc')->get();
 
+        $mtyresizes = DB::table('mtyresizes')
+        ->join('mtyretypes as ttinfo', 'mtyresizes.tyretype_id', '=', 'ttinfo.id')
+        ->select('mtyresizes.*', 'ttinfo.category_name as tyretype')
+        ->get();
+
         $transTyreSize = [];
         foreach ($mtyresizes as $mtyresize) {
-            $tyretypename = getval('mtyretypes', 'id', $mtyresize->tyretype_id, 'category_name');
             $datatyresize = (object)[];
             $datatyresize->id = $mtyresize->id;
-            $datatyresize->tyretype_id = $tyretypename;
+            $datatyresize->tyretype_id = $mtyresize->tyretype_id;
+            $datatyresize->tyretype_name = $mtyresize->tyretype;
             $datatyresize->category_name = $mtyresize->category_name;
             $datatyresize->status = $mtyresize->status;
             $datatyresize->operatorid = $mtyresize->operatorid;
@@ -109,14 +114,26 @@ class MtypesizeController extends Controller
     public function gettyretypeByid(Request $request)
     {
         // return "okk";die;
+        $arrayObj =[];
+
         try {
             $mtyresizes = DB::table('mtyresizes as tsinfo')
                 ->join('mtyretypes as ttinfo', 'tsinfo.tyretype_id', '=', 'ttinfo.id')
                 ->select('tsinfo.tyretype_id as tyretype_id', 'ttinfo.category_name as tyretype', 'tsinfo.category_name as tyresize')
                 ->where("tsinfo.id", $request->id)->get();
+                $arrayObj['tyretype_id']=$mtyresizes[0]->tyretype_id;
+                $arrayObj['tyretype']=$mtyresizes[0]->tyretype;
+                $arrayObj['tyresize']=$mtyresizes[0]->tyresize;
+            if (count($arrayObj) > 0) {
+                $obj=["Status"=>true,"success"=>1,"data"=>['users'=>$arrayObj],"msg"=>"Tyre Size For Update"];
+                return response()->json($obj);
+            } else {
+                $obj = ["Status" => false, "success" => 0, "errors" => "No data found."];
+                return response()->json($obj);
+            }
+//$obj = ["Status" => true, "success" => 1, 'Tyre Size For Update' => $mtyresizes];
+//return response()->json($obj);
 
-            $obj = ["Status" => true, "success" => 1, 'Tyre Size For Update' => $mtyresizes];
-            return response()->json($obj);
         } catch (\Exception $ex) {
             $obj = ["Status" => false, "success" => 0, "msg" => "Tyre Size For Update Not Found!"];
             return response()->json($obj);
@@ -141,24 +158,24 @@ class MtypesizeController extends Controller
         return response()->json($transTyreType);
     }
 
-    public function gettyretypeById(Request $request){
-        // return "okk";die;
-        $mtyretypes = Mtyretype::where('id',$request->id)->get();
-        $mtyretypes = Mtyretype::where('status', '1')->orderBy('id', 'desc')->get();
+    // public function gettyretypeById(Request $request){
+    //     // return "okk";die;
+    //     $mtyretypes = Mtyretype::where('id',$request->id)->get();
+    //     $mtyretypes = Mtyretype::where('status', '1')->orderBy('id', 'desc')->get();
 
-        if ($mtyretypes->isEmpty()) {
-            return response()->json(['error' => 'No Tyre Type found.'], 404);
-        }
+    //     if ($mtyretypes->isEmpty()) {
+    //         return response()->json(['error' => 'No Tyre Type found.'], 404);
+    //     }
 
-        $transTyreType = [];
-        foreach ($mtyretypes as $mtyretype) {
-            $datatyretype = (object)[];
-            $datatyretype->id = $mtyretype->id;
-            $datatyretype->category_name = $mtyretype->category_name;
-            $transTyreType[] = $datatyretype;
-        }
-        return response()->json($transTyreType);
-    }
+    //     $transTyreType = [];
+    //     foreach ($mtyretypes as $mtyretype) {
+    //         $datatyretype = (object)[];
+    //         $datatyretype->id = $mtyretype->id;
+    //         $datatyretype->category_name = $mtyretype->category_name;
+    //         $transTyreType[] = $datatyretype;
+    //     }
+    //     return response()->json($transTyreType);
+    // }
     // $mtyresizes = DB::table('mtyresizes')
             //     ->where("id", $request->id)
             //     ->get();
