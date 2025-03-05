@@ -102,6 +102,20 @@ class MtyretypeController extends Controller
     {
     }
 
+    public function getByid(Request $request)
+    {
+        // return "okk";die;
+        try {
+            $mtyretypes = Mtyretype::where('id',$request->id)->select('id', 'category_name')->get();
+            $obj = ["Status" => true, "success" => 1, 'Tyre Type For Update' => $mtyretypes];
+            return response()->json($obj);
+        } catch (\Exception $ex) {
+            return $ex;
+            $obj = ["Status" => false, "success" => 0, "msg" => "Tyre Type For Update Not Found!"];
+            return response()->json($obj);
+        }
+    }
+
     public function updatetyretype(Request $request, $id)
     {
         // return "ok";

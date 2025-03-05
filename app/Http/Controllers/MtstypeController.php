@@ -59,6 +59,20 @@ class MtstypeController extends Controller
         }
     }
 
+    public function getTSTByid(Request $request)
+    {
+        // return "okk";die;
+        try {
+            $mtyrestatustypes = Mtyrestatustype::where('id',$request->id)->select('id','category_name')->get();
+            $obj = ["Status" => true, "success" => 1, 'Tyre Status Type For Update' => $mtyrestatustypes];
+            return response()->json($obj);
+        } catch (\Exception $ex) {
+            return $ex;
+            $obj = ["Status" => false, "success" => 0, "msg" => "Tyre Status Type For Update Not Found!"];
+            return response()->json($obj);
+        }
+    }
+
     public function updatetstype(Request $request, $id)
     {
         // return "ok";die;

@@ -11,17 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tyrefitmanremovalinfos', function (Blueprint $table) {
+        Schema::create('repairimageinfos', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('tyre_site_id')->nullable();
-            $table->string('type')->nullable();
-            $table->date('service_date')->nullable();
-            $table->double('lbsr')->comment('log_book_sap_reading')->nullable();
+            $table->unsignedBigInteger('repair_id')->nullable();
+            $table->string('image')->nullable();
             $table->string('remark')->nullable();
             $table->timestamps();
 
             // Add foreign key
-            $table->foreign('tyre_site_id')->references('id')->on('tyresiteinfos')->onDelete('cascade');
+            $table->foreign('repair_id')->references('id')->on('repairinfos')->onDelete('cascade');
         });
     }
 
@@ -30,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tyrefitmanremovalinfos');
+        Schema::dropIfExists('repairimageinfos');
     }
 };

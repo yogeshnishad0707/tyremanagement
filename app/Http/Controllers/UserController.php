@@ -36,10 +36,17 @@ class UserController extends Controller
 
             $dataObject = (object)[];
             $dataObject->id = $userrole->id;
+<<<<<<< HEAD
             $dataObject->role_id = $userrole->role->name;
 
             $dataObject->parent_id = $parentname;
 
+=======
+            $dataObject->role_id = $userrole->role_id;
+            $dataObject->role_name = $userrole->role->name;
+            $dataObject->parent_id = $userrole->parent_id;
+            $dataObject->parent_name = $parentname;
+>>>>>>> 6d07207e53d757330435b54e873519e81e42bfe9
             $dataObject->name = $userrole->name;
 
             $dataObject->mobile_no = $userrole->mobile_no;
@@ -159,6 +166,28 @@ class UserController extends Controller
         }
     }
 
+    public function getuserByid(Request $request)
+    {
+        // return "okk";die;
+        try {
+            $users = DB::table('users')
+            ->join('roles as roles', 'users.role_id', '=', 'roles.id')  
+            ->join('roles as parent_roles', 'users.parent_id', '=', 'parent_roles.id')  
+            ->select('users.*','roles.name as role_name', 'parent_roles.name as parent_name') 
+            ->where("users.id", $request->id)->get();
+            // $users = DB::table('users as tsinfo')
+            //     ->join('mtyretypes as ttinfo', 'tsinfo.tyretype_id', '=', 'ttinfo.id')
+            //     ->select('tsinfo.tyretype_id as tyretype_id', 'ttinfo.category_name as tyretype', 'tsinfo.category_name as tyresize')
+            //     ->where("tsinfo.id", $request->id)->get();
+
+            $obj = ["Status" => true, "success" => 1, 'User For Update' => $users];
+            return response()->json($obj);
+        } catch (\Exception $ex) {
+            return $ex;
+            $obj = ["Status" => false, "success" => 0, "msg" => "User For Update Not Found!"];
+            return response()->json($obj);
+        }
+    }
     // public function multideleteuser(Request $request)
     // {
     //     $userIds = $request->userid;

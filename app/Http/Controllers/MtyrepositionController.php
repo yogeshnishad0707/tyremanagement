@@ -59,6 +59,20 @@ class MtyrepositionController extends Controller
         }
     }
 
+    public function getPositionByid(Request $request)
+    {
+        // return "okk";die;
+        try {
+            $mtyrepositions = Mtyreposition::where('id',$request->id)->select('id','type','category_name')->get();
+            $obj = ["Status" => true, "success" => 1, 'Tyre Position For Update' => $mtyrepositions];
+            return response()->json($obj);
+        } catch (\Exception $ex) {
+            return $ex;
+            $obj = ["Status" => false, "success" => 0, "msg" => "Tyre Position For Update Not Found!"];
+            return response()->json($obj);
+        }
+    }
+
     public function updatetyreposition(Request $request, $id)
     {
         // return "ok";die;

@@ -14,10 +14,6 @@ class MtypesizeController extends Controller
     {
         $mtyresizes = Mtyresize::orderBy('id', 'desc')->get();
 
-        $mtyresizes = DB::table('mtyresizes')
-        ->join('mtyretypes as ttinfo', 'mtyresizes.tyretype_id', '=', 'ttinfo.id')
-        ->select('mtyresizes.*', 'ttinfo.category_name as tyretype')
-        ->get();
 
         $transTyreSize = [];
         foreach ($mtyresizes as $mtyresize) {
@@ -25,6 +21,7 @@ class MtypesizeController extends Controller
             $datatyresize->id = $mtyresize->id;
             $datatyresize->tyretype_id = $mtyresize->tyretype_id;
             $datatyresize->tyretype_name = $mtyresize->tyretype;
+            $datatyresize->tyretype_name = $tyretypename;
             $datatyresize->category_name = $mtyresize->category_name;
             $datatyresize->status = $mtyresize->status;
             $datatyresize->operatorid = $mtyresize->operatorid;

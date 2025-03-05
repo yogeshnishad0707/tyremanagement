@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('tyre_site_id')->nullable();
             $table->date('service_date')->nullable();
             $table->string('no_of_cut')->nullable();
-            $table->string('rtd')->comment('Remaining_Thread_Depth')->nullable();
+            $table->double('rtd')->comment('Remaining_Thread_Depth')->nullable();
             $table->string('otl')->comment('Original_Tyre_Life')->nullable();
             $table->string('rl')->comment('Repaired_Life')->nullable();
             $table->string('ttl')->comment('Total_Tyre_Life')->nullable();
