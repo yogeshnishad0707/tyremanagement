@@ -31,28 +31,17 @@ class UserController extends Controller
 
         $transformedUserRoles = [];
         foreach ($users as $userrole) {
-            // return 'okkk';die;
             $parentname =  getval('roles', 'id', $userrole->parent_id, 'name');
-
             $dataObject = (object)[];
             $dataObject->id = $userrole->id;
-<<<<<<< HEAD
-            $dataObject->role_id = $userrole->role->name;
-
-            $dataObject->parent_id = $parentname;
-
-=======
             $dataObject->role_id = $userrole->role_id;
             $dataObject->role_name = $userrole->role->name;
             $dataObject->parent_id = $userrole->parent_id;
             $dataObject->parent_name = $parentname;
->>>>>>> 6d07207e53d757330435b54e873519e81e42bfe9
             $dataObject->name = $userrole->name;
-
             $dataObject->mobile_no = $userrole->mobile_no;
             $dataObject->email = $userrole->email;
             $dataObject->address = $userrole->address;
-
             $transformedUserRoles[] = $dataObject;
         }
         return response()->json($transformedUserRoles);
@@ -171,9 +160,9 @@ class UserController extends Controller
         // return "okk";die;
         try {
             $users = DB::table('users')
-            ->join('roles as roles', 'users.role_id', '=', 'roles.id')  
-            ->join('roles as parent_roles', 'users.parent_id', '=', 'parent_roles.id')  
-            ->select('users.*','roles.name as role_name', 'parent_roles.name as parent_name') 
+            ->join('roles as roles', 'users.role_id', '=', 'roles.id')
+            ->join('roles as parent_roles', 'users.parent_id', '=', 'parent_roles.id')
+            ->select('users.*','roles.name as role_name', 'parent_roles.name as parent_name')
             ->where("users.id", $request->id)->get();
             // $users = DB::table('users as tsinfo')
             //     ->join('mtyretypes as ttinfo', 'tsinfo.tyretype_id', '=', 'ttinfo.id')
@@ -275,7 +264,8 @@ class UserController extends Controller
     // }
 
     public function getUserByRoleId(Request $request)
-   {
+    {
+        // return $request;die;
         $role_id = $request->query('role_id');
         $parent_id = $request->query('parent_id');
 
@@ -491,3 +481,4 @@ class UserController extends Controller
         return "Your Password Change Successfully!!!";
     }
 }
+ 

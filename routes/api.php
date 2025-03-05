@@ -117,13 +117,11 @@ Route::middleware([TokenAuth::class])->group(function () {
     Route::get('gettruckmodel', [TyresiteinfoController::class, 'gettruckmodel']);
     Route::get('gettyreinfo', [TyresiteinfoController::class, 'gettyreinfo']);
     Route::get('gettyreposition', [TyresiteinfoController::class, 'gettyreposition']);
-<<<<<<< HEAD
      Route::get('gettyretypeById', [MtypesizeController::class, 'gettyretypeById']);
-=======
     Route::get('makelist', [MmakeController::class, 'makelist']);
     Route::post('insertMake', [MmakeController::class, 'insertMake']);
     Route::get('getMakeByid', [MmakeController::class, 'getMakeByid']);
     Route::put('updateMake/{id}', [MmakeController::class, 'updateMake']);
     Route::delete('deleteMake/{id}', [MmakeController::class, 'deleteMake']);
->>>>>>> 6d07207e53d757330435b54e873519e81e42bfe9
+
 });
