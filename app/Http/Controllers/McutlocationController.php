@@ -59,6 +59,20 @@ class McutlocationController extends Controller
         }
     }
 
+    public function getCutLocationByid(Request $request)
+    {
+        // return "okk";die;
+        try {
+            $mcutlocations = Mcutlocation::where('id',$request->id)->select('id','category_name')->get();
+            $obj = ["Status" => true, "success" => 1, 'Cut Location For Update' => $mcutlocations];
+            return response()->json($obj);
+        } catch (\Exception $ex) {
+            return $ex;
+            $obj = ["Status" => false, "success" => 0, "msg" => "Cut Location For Update Not Found!"];
+            return response()->json($obj);
+        }
+    }
+
     public function updatecutlocation(Request $request, $id)
     {
         // return "ok";die;

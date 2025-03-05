@@ -12,6 +12,7 @@ use App\Models\Mtyrestatustype;
 use App\Models\Mtyresize;
 use App\Models\Mtyreposition;
 use App\Models\Mtyretype;
+use App\Models\Mmake;
 
 class CheckstatusController extends Controller
 {
@@ -125,6 +126,18 @@ class CheckstatusController extends Controller
                     return response()->json(['Status' => false, 'success' => 0, 'msg' => 'ID and Status is required!']);
                 }
                 $checkstatus = Mtyreposition::findOrFail($request->id);
+                $checkstatus->update([
+                    'status'=>$request->status,
+                ]);
+                return response()->json(['message'=>'Status Updated SuccessFully!!']);
+            }
+
+            // now start check status Make page
+            if($request->page_name == 'Make'){
+                if (!$request->has('id') || !$request->has('status')) {
+                    return response()->json(['Status' => false, 'success' => 0, 'msg' => 'ID and Status is required!']);
+                }
+                $checkstatus = Mmake::findOrFail($request->id);
                 $checkstatus->update([
                     'status'=>$request->status,
                 ]);
