@@ -18,7 +18,8 @@ class MtruckmodelController extends Controller
             $mtruckmakename = getval('mtruckmakes','id',$mtruckmodel->truckmake_id,'category_name');
             $datatruckmodel = (object)[];
             $datatruckmodel->id = $mtruckmodel->id;
-            $datatruckmodel->truckmake_id = $mtruckmakename;
+            $datatruckmodel->truckmake_id = $mtruckmodel->truckmake_id;
+            $datatruckmodel->truckmake_name = $mtruckmakename;
             $datatruckmodel->category_name = $mtruckmodel->category_name;
             $datatruckmodel->status = $mtruckmodel->status;
             $datatruckmodel->operatorid = $mtruckmodel->operatorid;
@@ -60,6 +61,31 @@ class MtruckmodelController extends Controller
         } catch (\Exception $ex) {
             return $ex;
             $obj = ["Status" => false, "success" => 0, "msg" => "Truck Model Not Added!!"];
+            return response()->json($obj);
+        }
+    }
+
+    public function getTruckModelByid(Request $request)
+    {
+        // return "okk";die;
+        try {
+            $mtruckmodels = Mtruckmodel::where('id',$request->id)->first();
+
+            if(!$mtruckmodels){
+                return response()->json(["Status" => false, "success" => 0, "msg" => "Truck Model Not Found!"]);
+            }
+
+            $truckmake = getval('mtruckmakes','id',$mtruckmodels->truckmake_id,'category_name');
+            $mtruckmodels =[
+                'id' =>$mtruckmodels->id,
+                'truckmake_id' =>$mtruckmodels->truckmake_id,
+                'truckmake' =>$truckmake,
+                'category_name' =>$mtruckmodels->category_name,
+            ];
+            $obj = ["Status" => true, "success" => 1, 'Truck Model For Update' => $mtruckmodels];
+            return response()->json($obj);
+        } catch (\Exception $ex) {
+            $obj = ["Status" => false, "success" => 0, "msg" => "Truck Model For Update Not Found!"];
             return response()->json($obj);
         }
     }

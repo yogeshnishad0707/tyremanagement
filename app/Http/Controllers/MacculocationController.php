@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Maccuratelocation;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class MacculocationController extends Controller
 {
@@ -55,6 +56,20 @@ class MacculocationController extends Controller
         } catch (\Exception $ex) {
             return $ex;
             $obj = ["Status" => false, "success" => 0, "msg" => "Accurate Location Not Added!!"];
+            return response()->json($obj);
+        }
+    }
+
+    public function getacculocationByid(Request $request)
+    {
+        // return "okk";die;
+        try {
+            $maccuratelocations = Maccuratelocation::where('id',$request->id)->select('id', 'category_name')->get();
+            $obj = ["Status" => true, "success" => 1, 'Accurate Location For Update' => $maccuratelocations];
+            return response()->json($obj);
+        } catch (\Exception $ex) {
+            return $ex;
+            $obj = ["Status" => false, "success" => 0, "msg" => "Accurate Location For Update Not Found!"];
             return response()->json($obj);
         }
     }

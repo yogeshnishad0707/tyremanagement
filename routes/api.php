@@ -19,6 +19,7 @@ use App\Http\Controllers\SiteproController;
 use App\Http\Controllers\TyreinfoController;
 use App\Http\Controllers\TyresiteinfoController;
 use App\Http\Controllers\CheckstatusController;
+use App\Http\Controllers\MmakeController;
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
@@ -40,6 +41,7 @@ Route::middleware([TokenAuth::class])->group(function () {
     Route::get('userlist', [UserController::class, 'userlist']);
     Route::post('adduser', [UserController::class, 'adduser']);
     Route::put('updateuser/{id}', [UserController::class, 'updateuser']);
+    Route::get('getuserByid', [UserController::class, 'getuserByid']);
     Route::delete('deleteuser/{id}', [UserController::class, 'deleteuser']);
     Route::get('getroles', [UserController::class, 'getroles']);
     Route::post('multideleteuser', [UserController::class, 'multideleteuser']);
@@ -54,38 +56,47 @@ Route::middleware([TokenAuth::class])->group(function () {
     Route::resource('mtyretype', MtyretypeController::class);
     Route::put('updatetyretype/{id}', [MtyretypeController::class, 'updatetyretype']);
     Route::delete('deletetyretype/{id}', [MtyretypeController::class, 'deletetyretype']);
+    Route::get('getByid', [MtyretypeController::class, 'getByid']);
     Route::get('tyresizelist', [MtypesizeController::class, 'tyresizelist']);
     Route::post('inserttyresize', [MtypesizeController::class, 'inserttyresize']);
+    Route::get('gettyretypeByid', [MtypesizeController::class, 'gettyretypeByid']);
     Route::put('updatetyresize/{id}', [MtypesizeController::class, 'updatetyresize']);
     Route::delete('deletetyresize/{id}', [MtypesizeController::class, 'deletetyresize']);
     Route::get('gettyretype', [MtypesizeController::class, 'gettyretype']);
     Route::get('truckmakelist', [MtruckmakeController::class, 'truckmakelist']);
     Route::post('inserttruckmake', [MtruckmakeController::class, 'inserttruckmake']);
+    Route::get('getTruckMakeByid', [MtruckmakeController::class, 'getTruckMakeByid']);
     Route::put('updatetruckmake/{id}', [MtruckmakeController::class, 'updatetruckmake']);
     Route::delete('deletetruckmake/{id}', [MtruckmakeController::class, 'deletetruckmake']);
     Route::get('truckmodellist', [MtruckmodelController::class, 'truckmodellist']);
     Route::post('insertruckmodel', [MtruckmodelController::class, 'insertruckmodel']);
+    Route::get('getTruckModelByid', [MtruckmodelController::class, 'getTruckModelByid']);
     Route::put('updatetruckmodel/{id}', [MtruckmodelController::class, 'updatetruckmodel']);
     Route::delete('deletetruckmodel/{id}', [MtruckmodelController::class, 'deletetruckmodel']);
     Route::get('gettruckmake', [MtruckmodelController::class, 'gettruckmake']);
     Route::get('tyrepositionlist', [MtyrepositionController::class, 'tyrepositionlist']);
     Route::post('inserttyreposition', [MtyrepositionController::class, 'inserttyreposition']);
+    Route::get('getPositionByid', [MtyrepositionController::class, 'getPositionByid']);
     Route::put('updatetyreposition/{id}', [MtyrepositionController::class, 'updatetyreposition']);
     Route::delete('deletetyreposition/{id}', [MtyrepositionController::class, 'deletetyreposition']);
     Route::get('cutlocationlist', [McutlocationController::class, 'cutlocationlist']);
     Route::post('insertcutlocation', [McutlocationController::class, 'insertcutlocation']);
+    Route::get('getCutLocationByid', [McutlocationController::class, 'getCutLocationByid']);
     Route::put('updatecutlocation/{id}', [McutlocationController::class, 'updatecutlocation']);
     Route::delete('deletecutlocation/{id}', [McutlocationController::class, 'deletecutlocation']);
     Route::get('accuratelocationlist', [MacculocationController::class, 'accuratelocationlist']);
     Route::post('insertaccuratelocation', [MacculocationController::class, 'insertaccuratelocation']);
+    Route::get('getacculocationByid', [MacculocationController::class, 'getacculocationByid']);
     Route::put('updateaccuratelocation/{id}', [MacculocationController::class, 'updateaccuratelocation']);
     Route::delete('deleteaccuratelocation/{id}', [MacculocationController::class, 'deleteaccuratelocation']);
     Route::get('ntccutlist', [MntccutController::class, 'ntccutlist']);
     Route::post('insertntccut', [MntccutController::class, 'insertntccut']);
+    Route::get('getNtCByid', [MntccutController::class, 'getNtCByid']);
     Route::put('updatentccut/{id}', [MntccutController::class, 'updatentccut']);
     Route::delete('deletentccut/{id}', [MntccutController::class, 'deletentccut']);
     Route::get('tstypelist', [MtstypeController::class, 'tstypelist']);
     Route::post('inserttstype', [MtstypeController::class, 'inserttstype']);
+    Route::get('getTSTByid', [MtstypeController::class, 'getTSTByid']);
     Route::put('updatetstype/{id}', [MtstypeController::class, 'updatetstype']);
     Route::delete('deletetstype/{id}', [MtstypeController::class, 'deletetstype']);
     Route::get('siteprojectlist', [SiteproController::class, 'siteprojectlist']);
@@ -94,7 +105,6 @@ Route::middleware([TokenAuth::class])->group(function () {
     Route::delete('deletesiteproject/{id}', [SiteproController::class, 'deletesiteproject']);
     Route::get('getsitename', [SiteproController::class, 'getsitename']);
     Route::get('tyreinfolist', [TyreinfoController::class, 'tyreinfolist']);
-
     Route::post('inserttyreinfo', [TyreinfoController::class, 'inserttyreinfo']);
     Route::put('updatetyreinfo/{id}', [TyreinfoController::class, 'updatetyreinfo']);
     Route::delete('deletetyreinfo/{id}', [TyreinfoController::class, 'deletetyreinfo']);
@@ -107,6 +117,9 @@ Route::middleware([TokenAuth::class])->group(function () {
     Route::get('gettruckmodel', [TyresiteinfoController::class, 'gettruckmodel']);
     Route::get('gettyreinfo', [TyresiteinfoController::class, 'gettyreinfo']);
     Route::get('gettyreposition', [TyresiteinfoController::class, 'gettyreposition']);
-
-    Route::get('gettyretypeByid', [MtypesizeController::class, 'gettyretypeByid']);
+    Route::get('makelist', [MmakeController::class, 'makelist']);
+    Route::post('insertMake', [MmakeController::class, 'insertMake']);
+    Route::get('getMakeByid', [MmakeController::class, 'getMakeByid']);
+    Route::put('updateMake/{id}', [MmakeController::class, 'updateMake']);
+    Route::delete('deleteMake/{id}', [MmakeController::class, 'deleteMake']);
 });

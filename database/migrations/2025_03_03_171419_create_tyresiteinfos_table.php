@@ -23,9 +23,9 @@ return new class extends Migration
             $table->date('fitmandate')->nullable();
             $table->date('removaldate')->nullable();
             $table->date('replacedate')->nullable();
-            $table->string('front_life')->nullable();
-            $table->string('rear_life')->nullable();
-            $table->string('repair_life')->nullable();
+            $table->double('front_life')->nullable();
+            $table->double('rear_life')->nullable();
+            $table->double('repair_life')->nullable();
             $table->string('curr_status')->nullable();
             $table->string('remark')->nullable();
             $table->enum('status',['0','1'])->default();

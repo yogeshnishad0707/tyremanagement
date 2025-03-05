@@ -58,6 +58,20 @@ class MtruckmakeController extends Controller
         }
     }
 
+    public function getTruckMakeByid(Request $request)
+    {
+        // return "okk";die;
+        try {
+            $mtruckmakes = Mtruckmake::where('id',$request->id)->select('id', 'category_name')->get();
+            $obj = ["Status" => true, "success" => 1, 'Truck Make For Update' => $mtruckmakes];
+            return response()->json($obj);
+        } catch (\Exception $ex) {
+            return $ex;
+            $obj = ["Status" => false, "success" => 0, "msg" => "Truck Make For Update Not Found!"];
+            return response()->json($obj);
+        }
+    }
+
     public function updatetruckmake(Request $request, $id)
     {
         // return "ok";die;

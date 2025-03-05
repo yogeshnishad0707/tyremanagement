@@ -59,6 +59,20 @@ class MntccutController extends Controller
         }
     }
 
+    public function getNtCByid(Request $request)
+    {
+        // return "okk";die;
+        try {
+            $mntccuts = Mntccut::where('id',$request->id)->select('id','category_name')->get();
+            $obj = ["Status" => true, "success" => 1, 'NTC & TC For Update' => $mntccuts];
+            return response()->json($obj);
+        } catch (\Exception $ex) {
+            return $ex;
+            $obj = ["Status" => false, "success" => 0, "msg" => "NTC & TC For Update Not Found!"];
+            return response()->json($obj);
+        }
+    }
+
     public function updatentccut(Request $request, $id)
     {
         // return "ok";die;

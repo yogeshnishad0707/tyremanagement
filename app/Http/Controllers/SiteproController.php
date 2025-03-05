@@ -18,7 +18,8 @@ class SiteproController extends Controller
             $site_name = getval('users','id',$siteproject->site_id,'name');
             $dataSiteProject = (object)[];
             $dataSiteProject->id = $siteproject->id;
-            $dataSiteProject->site_id = $site_name;
+            $dataSiteProject->site_id = $siteproject->site_id;
+            $dataSiteProject->site_name = $site_name;
             $dataSiteProject->project_name = $siteproject->project_name;
             $dataSiteProject->status = $siteproject->status;
             $dataSiteProject->operatorid = $siteproject->operatorid;

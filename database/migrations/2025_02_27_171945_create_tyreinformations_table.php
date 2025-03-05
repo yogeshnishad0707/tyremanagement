@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('tyreinformations', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('tyresize_id')->nullable();
-            $table->string('make')->nullable();
+            // $table->string('make')->nullable();
             $table->string('tyre_no')->unique()->nullable();
             $table->string('curr_status')->nullable();
             $table->string('otl')->comment('original tyre life')->nullable();
-            $table->string('otd')->comment('original thread dept')->nullable();
+            $table->double('otd')->comment('original thread dept')->nullable();
             $table->enum('status',['0','1'])->default('1');
             $table->unsignedBigInteger('operatorid')->nullable();
             $table->timestamps();
