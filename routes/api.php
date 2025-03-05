@@ -20,6 +20,7 @@ use App\Http\Controllers\TyreinfoController;
 use App\Http\Controllers\TyresiteinfoController;
 use App\Http\Controllers\CheckstatusController;
 use App\Http\Controllers\MmakeController;
+use App\Http\Controllers\TyreentryController;
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
@@ -46,6 +47,8 @@ Route::middleware([TokenAuth::class])->group(function () {
     Route::get('getroles', [UserController::class, 'getroles']);
     Route::post('multideleteuser', [UserController::class, 'multideleteuser']);
     Route::get('usersearch', [UserController::class, 'usersearch']);
+    Route::get('getPage', [UserController::class, 'getPage']);
+    Route::get('getCategory', [UserController::class, 'getCategory']);
     // Route::get('GetUserbyRoleId/{role_id}/{parent_id}', [UserController::class, 'GetUserbyRoleId']);
     Route::get('getUserByRoleId', [UserController::class, 'getUserByRoleId']);
     Route::get('getparentroles', [UserController::class, 'getparentroles']);
@@ -124,4 +127,10 @@ Route::middleware([TokenAuth::class])->group(function () {
     Route::put('updateMake/{id}', [MmakeController::class, 'updateMake']);
     Route::delete('deleteMake/{id}', [MmakeController::class, 'deleteMake']);
 
+<<<<<<< HEAD
+=======
+    // tyre entry
+    Route::post('insertTyreEntry', [TyreentryController::class, 'insertTyreEntry']);
+    Route::delete('deleteTyreEntry/{id}', [TyreentryController::class, 'deleteTyreEntry']);
+>>>>>>> 47aedb7bab3178d19aba4b012b5b4a783db50280
 });

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\PasswordReset;
+use App\Models\Pageinfo;
+use App\Models\Permissioncategory;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -479,6 +481,40 @@ class UserController extends Controller
         $user->save();
         PasswordReset::where('email', $user->email)->delete();
         return "Your Password Change Successfully!!!";
+    }
+
+    public function getPage()
+    {
+        // return "hello";die;
+        $Pageinfos = Pageinfo::orderBy('id','desc')->get();
+        if ($Pageinfos->isEmpty()) {
+            return response()->json(['error' => 'No pages found.'], 404);
+        }
+        $transPageInfos = [];
+        foreach ($Pageinfos as $Page) {
+            $dataPage = (object)[];
+            $dataPage->id = $Page->id;
+            $dataPage->name = $Page->pagename;
+            $transPageInfos[] = $dataPage;
+        }
+        return response()->json($transPageInfos);
+    }
+
+    public function getCategory()
+    {
+        // return "hello";die;
+        $permissioncategories = Permissioncategory::orderBy('id','desc')->get();
+        if ($permissioncategories->isEmpty()) {
+            return response()->json(['error' => 'No pages found.'], 404);
+        }
+        $transPerCate = [];
+        foreach ($permissioncategories as $category) {
+            $dataCategory = (object)[];
+            $dataCategory->id = $category->id;
+            $dataCategory->name = $category->pc_name;
+            $transPerCate[] = $dataCategory;
+        }
+        return response()->json($transPerCate);
     }
 }
  
