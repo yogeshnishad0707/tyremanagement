@@ -19,14 +19,14 @@ return new class extends Migration
             $table->unsignedBigInteger('position_id')->nullable();
             $table->string('ponumber')->nullable();
             $table->string('truck_no')->nullable();
-            $table->string('otl')->comment('original tyre life')->nullable();
+            $table->double('otl')->comment('original tyre life')->nullable();
             $table->date('fitmandate')->nullable();
             $table->date('removaldate')->nullable();
             $table->date('replacedate')->nullable();
             $table->double('front_life')->nullable();
             $table->double('rear_life')->nullable();
             $table->double('repair_life')->nullable();
-            $table->string('curr_status')->nullable();
+            $table->string('current_status')->nullable();
             $table->string('remark')->nullable();
             $table->enum('status',['0','1'])->default();
             $table->string('operatorid')->nullable();
