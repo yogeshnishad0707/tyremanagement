@@ -23,6 +23,7 @@ class SiteproController extends Controller
             $dataSiteProject->project_name = $siteproject->project_name;
             $dataSiteProject->status = $siteproject->status;
             $dataSiteProject->operatorid = $siteproject->operatorid;
+            $dataSiteProject->page_name = 'SiteProject';
             $transSiteProject[] = $dataSiteProject;
         }
         return response()->json($transSiteProject);

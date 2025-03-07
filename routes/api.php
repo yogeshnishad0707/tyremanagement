@@ -21,6 +21,7 @@ use App\Http\Controllers\TyresiteinfoController;
 use App\Http\Controllers\CheckstatusController;
 use App\Http\Controllers\MmakeController;
 use App\Http\Controllers\TyreentryController;
+use App\Http\Controllers\TyreremovalController;
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
@@ -125,8 +126,19 @@ Route::middleware([TokenAuth::class])->group(function () {
     Route::get('getMakeByid', [MmakeController::class, 'getMakeByid']);
     Route::put('updateMake/{id}', [MmakeController::class, 'updateMake']);
     Route::delete('deleteMake/{id}', [MmakeController::class, 'deleteMake']);
+    Route::get('tyreEntryList', [TyreentryController::class, 'tyreEntryList']);
+    Route::post('insertTyreEntry', [TyreentryController::class, 'insertTyreEntry']);
+    Route::delete('deletetyreentry', [TyreentryController::class, 'deletetyreentry']);
+    Route::put('updateTyreEntry', [TyreentryController::class, 'updateTyreEntry']);
+    Route::get('getsiteProjectFor_SiteAdmin', [TyreentryController::class, 'getsiteProjectFor_SiteAdmin']);
+    Route::get('getTyreTypeTyreSize', [TyreentryController::class, 'getTyreTypeTyreSize']);
+    Route::get('getMake', [TyreentryController::class, 'getMake']);
+    Route::get('getTruckMakeTruckModel', [TyreentryController::class, 'getTruckMakeTruckModel']);
+    Route::get('getPositionType', [TyreentryController::class, 'getPositionType']);
+    Route::get('getType', [TyreentryController::class, 'getType']);
 
     // tyre entry
-    Route::post('insertTyreEntry', [TyreentryController::class, 'insertTyreEntry']);
-    Route::delete('deleteTyreEntry/{id}', [TyreentryController::class, 'deleteTyreEntry']);
+    Route::post('insertTyreRemoval', [TyreremovalController::class, 'insertTyreRemoval']);
+    Route::get('getTyreInfoById', [TyreremovalController::class, 'getTyreInfoById']);
+    Route::get('getTyreSiteByIdInfo', [TyreremovalController::class, 'getTyreSiteByIdInfo']);
 });
