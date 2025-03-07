@@ -33,13 +33,13 @@ class UserController extends Controller
 
         $transformedUserRoles = [];
         foreach ($users as $userrole) {
-            $parentname =  getval('roles', 'id', $userrole->parent_id, 'name');
+            // $parentname =  getval('roles', 'id', $userrole->parent_id, 'name');
             $dataObject = (object)[];
             $dataObject->id = $userrole->id;
             $dataObject->role_id = $userrole->role_id;
-            $dataObject->role_name = $userrole->role->name;
+            // $dataObject->role_name = $userrole->role->name;
             $dataObject->parent_id = $userrole->parent_id;
-            $dataObject->parent_name = $parentname;
+            // $dataObject->parent_name = $parentname;
             $dataObject->name = $userrole->name;
             $dataObject->mobile_no = $userrole->mobile_no;
             $dataObject->email = $userrole->email;
@@ -358,6 +358,7 @@ class UserController extends Controller
             $parentname = getval('roles', 'id', $user->parent_id, 'name');
 
             $dataObj = new \stdClass();
+            $dataObj->id = $user->id;
             $dataObj->role_id = $rolename;
             $dataObj->parent_id = $parentname;
             $dataObj->name = $user->name;
