@@ -13,6 +13,7 @@ use App\Models\Mtyresize;
 use App\Models\Mtyreposition;
 use App\Models\Mtyretype;
 use App\Models\Mmake;
+use App\Models\Siteproject;
 
 class CheckstatusController extends Controller
 {
@@ -138,6 +139,18 @@ class CheckstatusController extends Controller
                     return response()->json(['Status' => false, 'success' => 0, 'msg' => 'ID and Status is required!']);
                 }
                 $checkstatus = Mmake::findOrFail($request->id);
+                $checkstatus->update([
+                    'status'=>$request->status,
+                ]);
+                return response()->json(['message'=>'Status Updated SuccessFully!!']);
+            }
+            
+            // now start check status Site Project Page
+            if($request->page_name == 'SiteProject'){
+                if (!$request->has('id') || !$request->has('status')) {
+                    return response()->json(['Status' => false, 'success' => 0, 'msg' => 'ID and Status is required!']);
+                }
+                $checkstatus = Siteproject::findOrFail($request->id);
                 $checkstatus->update([
                     'status'=>$request->status,
                 ]);
