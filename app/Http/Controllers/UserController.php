@@ -34,19 +34,27 @@ class UserController extends Controller
         $transformedUserRoles = [];
         foreach ($users as $userrole) {
             $parentname =  getval('roles', 'id', $userrole->parent_id, 'name');
+
             $dataObject = (object)[];
+
             $dataObject->id = $userrole->id;
             $dataObject->role_id = $userrole->role_id;
-            $dataObject->role_name = $userrole->role->name;
+
             $dataObject->parent_id = $userrole->parent_id;
-            $dataObject->parent_name = $parentname;
+
+
             $dataObject->name = $userrole->name;
             $dataObject->mobile_no = $userrole->mobile_no;
             $dataObject->email = $userrole->email;
+
             $dataObject->address = $userrole->address;
+
             $transformedUserRoles[] = $dataObject;
+
         }
+
         return response()->json($transformedUserRoles);
+        return  "ok"; die;
     }
 
     // public function userlist()
@@ -108,12 +116,12 @@ class UserController extends Controller
     {
         // return $request;
         $validator = Validator::make($request->all(), [
-            'role_id' => 'required',
-            'name' => 'required|string|max:255',
-            'mobile_no' => 'required|string|max:12',
-            'email' => 'required|email',
-            'password' => 'required|string',
-            'address' => 'required|',
+            // 'role_id' => 'required',
+
+            // 'email' => 'required|email', 'name' => 'required|string|max:255',
+            // 'mobile_no' => 'required|string|max:12',
+            // 'password' => 'required|string',
+            // 'address' => 'required|',
         ]);
 
         if ($validator->fails()) {
@@ -358,6 +366,7 @@ class UserController extends Controller
             $parentname = getval('roles', 'id', $user->parent_id, 'name');
 
             $dataObj = new \stdClass();
+            $dataObj->id = $user->id;
             $dataObj->role_id = $rolename;
             $dataObj->parent_id = $parentname;
             $dataObj->name = $user->name;
@@ -517,4 +526,3 @@ class UserController extends Controller
         return response()->json($transPerCate);
     }
 }
- 

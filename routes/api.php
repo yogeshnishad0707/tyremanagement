@@ -126,11 +126,7 @@ Route::middleware([TokenAuth::class])->group(function () {
     Route::get('getMakeByid', [MmakeController::class, 'getMakeByid']);
     Route::put('updateMake/{id}', [MmakeController::class, 'updateMake']);
     Route::delete('deleteMake/{id}', [MmakeController::class, 'deleteMake']);
-
-<<<<<<< HEAD
-=======
     // tyre entry
     Route::post('insertTyreEntry', [TyreentryController::class, 'insertTyreEntry']);
     Route::delete('deleteTyreEntry/{id}', [TyreentryController::class, 'deleteTyreEntry']);
->>>>>>> 47aedb7bab3178d19aba4b012b5b4a783db50280
 });
