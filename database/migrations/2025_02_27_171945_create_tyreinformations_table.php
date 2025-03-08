@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('tyreinformations', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('tyresize_id')->nullable();
-            // $table->string('make')->nullable();
+            $table->string('ponumber')->nullable();
             $table->string('tyre_no')->unique()->nullable();
             $table->string('current_status')->nullable();
             $table->double('otl')->comment('original tyre life')->nullable();

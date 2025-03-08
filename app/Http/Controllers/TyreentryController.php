@@ -26,6 +26,7 @@ class TyreentryController extends Controller
             ->select(
                 'tyreinformations.id as id', 
                 'tyreinformations.tyresize_id as tyresize_id',
+                'tyreinformations.ponumber as ponumber', 
                 'tyreinformations.tyre_no as tyre_no',
                 'tyreinformations.current_status as current_status',
                 'tyreinformations.otl as otl',
@@ -35,7 +36,6 @@ class TyreentryController extends Controller
                 'tyresiteinfos.project_id as project_id', // Another column from 'tyreinformations'
                 'tyresiteinfos.truck_modal_id as truck_modal_id', // Specific column from 'tyresiteinfos'
                 'tyresiteinfos.position_id as position_id', 
-                'tyresiteinfos.ponumber as ponumber', 
                 'tyresiteinfos.truck_no as truck_no', 
                 'tyresiteinfos.fitmandate as fitmandate', 
                 'tyrefitmanremovalinfos.tyre_site_id', // Specific column from 'tyrefitmanremovalinfos'
@@ -81,6 +81,7 @@ class TyreentryController extends Controller
             $dataTyreEntry->tyretype_name = $tyretype_name;
             $dataTyreEntry->tyresize_id = $tyreinfo->tyresize_id;
             $dataTyreEntry->tyresize_name = $tyresize_name;
+            $dataTyreEntry->ponumber = $tyreinfo->ponumber;
             $dataTyreEntry->make_id = $tyreinfo->make_id;
             $dataTyreEntry->make_name = $make_name;
             $dataTyreEntry->tyre_no = $tyreinfo->tyre_no;
@@ -99,7 +100,6 @@ class TyreentryController extends Controller
             $dataTyreEntry->position_id = $tyreinfo->position_id;
             $dataTyreEntry->position_type_id = $tyreinfo->position_id;
             $dataTyreEntry->position_name  = $position_name;
-            $dataTyreEntry->ponumber = $tyreinfo->ponumber;
             $dataTyreEntry->truck_no = $tyreinfo->truck_no;
             $dataTyreEntry->fitmandate = $tyreinfo->fitmandate;
             $dataTyreEntry->remark = $tyreinfo->remark;
@@ -141,6 +141,7 @@ class TyreentryController extends Controller
         $tyreinformations = new Tyreinformation();
         // $tyreinformations->tyretype_id = $request->tyretype_id;
         $tyreinformations->tyresize_id = $request->tyresize_id;
+        $tyreinformations->ponumber = $request->ponumber;
         $tyreinformations->make_id =  $request->make_id;
         $tyreinformations->tyre_no =  $request->tyre_no;
         $tyreinformations->current_status = 'running';
@@ -174,7 +175,6 @@ class TyreentryController extends Controller
             $tyresiteinfos->truck_modal_id = $request->truck_modal_id;
             $tyresiteinfos->tyre_info_id = $tyre_infoid;
             $tyresiteinfos->position_id = $request->position_id;
-            $tyresiteinfos->ponumber = $request->ponumber;
             $tyresiteinfos->truck_no = $request->truck_no;
             $tyresiteinfos->otl = $request->otl;
             $tyresiteinfos->fitmandate = $request->service_date;
@@ -277,6 +277,7 @@ class TyreentryController extends Controller
         // Update tyre information
         $tyreinformations->update([
             'tyresize_id' => $request->tyresize_id,
+            'ponumber' => $request->ponumber,
             'make_id' => $request->make_id,
             'tyre_no' => $request->tyre_no,
             'current_status' => 'running',
@@ -309,7 +310,6 @@ class TyreentryController extends Controller
                 'project_id' => $request->project_id,
                 'truck_modal_id' => $request->truck_modal_id,
                 'position_id' => $request->position_id,
-                'ponumber' => $request->ponumber,
                 'truck_no' => $request->truck_no,
                 'otl' => $request->otl,
                 'fitmandate' => $request->service_date,

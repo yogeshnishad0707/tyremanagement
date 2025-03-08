@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('truck_modal_id')->nullable();
             $table->unsignedBigInteger('tyre_info_id')->nullable();
             $table->unsignedBigInteger('position_id')->nullable();
-            $table->string('ponumber')->nullable();
+            // $table->string('ponumber')->nullable();
             $table->string('truck_no')->nullable();
             $table->double('otl')->comment('original tyre life')->nullable();
             $table->date('fitmandate')->nullable();
