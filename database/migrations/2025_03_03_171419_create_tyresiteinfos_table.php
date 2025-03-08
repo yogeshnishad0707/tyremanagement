@@ -27,7 +27,7 @@ return new class extends Migration
             $table->double('rear_life')->nullable();
             $table->double('repair_life')->nullable();
             $table->string('current_status')->nullable();
-            $table->string('remark')->nullable();
+            $table->integer('remark')->nullable();
             $table->enum('status',['0','1'])->default();
             $table->string('operatorid')->nullable();
             $table->timestamps();

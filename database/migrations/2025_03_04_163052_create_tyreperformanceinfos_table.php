@@ -24,7 +24,7 @@ return new class extends Migration
             $table->double('fl')->comment('Front-Life')->nullable();
             $table->double('rl')->comment('Rear-Life')->nullable();
             $table->double('repaire_life')->nullable();
-            $table->string('remark')->nullable();
+            $table->integer('remark')->nullable();
             $table->unsignedBigInteger('operatorid')->nullable();
             $table->timestamps();
 
