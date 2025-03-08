@@ -528,7 +528,6 @@ class TyreentryController extends Controller
         {
             // return "okk";die;
             $tyreinformations = Tyreinformation::orderBy('id', 'desc')->get();
-
             // return  $tyreinformations ;
             if ($tyreinformations->isEmpty()) {
                 return response()->json(['Status' => false, 'Success' => '0', 'msg' => 'Type Number Not Found!!']);
