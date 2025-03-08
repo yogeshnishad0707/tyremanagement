@@ -24,7 +24,7 @@ class TyreentryController extends Controller
             ->join('tyrefitmanremovalinfos', 'tyresiteinfos.id', '=', 'tyrefitmanremovalinfos.tyre_site_id')
             ->join('tyreperformanceinfos', 'tyresiteinfos.id', '=', 'tyreperformanceinfos.tyre_site_id')
             ->select(
-                'tyreinformations.id as id', 
+                'tyreinformations.id as id',
                 'tyreinformations.tyresize_id as tyresize_id',
                 'tyreinformations.tyre_no as tyre_no',
                 'tyreinformations.current_status as current_status',
@@ -34,10 +34,10 @@ class TyreentryController extends Controller
                 'tyresiteinfos.tyre_info_id as tyre_info_id',
                 'tyresiteinfos.project_id as project_id', // Another column from 'tyreinformations'
                 'tyresiteinfos.truck_modal_id as truck_modal_id', // Specific column from 'tyresiteinfos'
-                'tyresiteinfos.position_id as position_id', 
-                'tyresiteinfos.ponumber as ponumber', 
-                'tyresiteinfos.truck_no as truck_no', 
-                'tyresiteinfos.fitmandate as fitmandate', 
+                'tyresiteinfos.position_id as position_id',
+                'tyresiteinfos.ponumber as ponumber',
+                'tyresiteinfos.truck_no as truck_no',
+                'tyresiteinfos.fitmandate as fitmandate',
                 'tyrefitmanremovalinfos.tyre_site_id', // Specific column from 'tyrefitmanremovalinfos'
                 'tyrefitmanremovalinfos.remark',
                 'tyrefitmanremovalinfos.service_date',
@@ -395,6 +395,7 @@ class TyreentryController extends Controller
         foreach ($siteprojects as $project) {
             $dataSiteProject = (object)[];
             $dataSiteProject->id = $project->id;
+            $dataSiteProject->site_id = $project->site_id;
             $dataSiteProject->project_name = $project->project_name;
             $transSiteProject[] = $dataSiteProject;
         }
@@ -465,7 +466,7 @@ class TyreentryController extends Controller
         return response()->json($transTruckModel);
     }
 
-    // get Position Type 
+    // get Position Type
     public function getType()
     {
         // return "okk";die;
