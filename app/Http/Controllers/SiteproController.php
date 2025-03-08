@@ -107,7 +107,7 @@ class SiteproController extends Controller
 
     public function getsitename(){
         // return "okk";die;
-        $users = User::where('role_id','2')->get(); 
+        $users = User::where('role_id','2')->get();
 
         // if ($mtruckmakes->isEmpty()) {
         //     return response()->json(['error' => 'No Truck Make Found.'], 404);

@@ -132,7 +132,7 @@ class MtruckmodelController extends Controller
 
     public function gettruckmake(){
         // return "okk";die;
-        $mtruckmakes = Mtruckmake::where('status','1')->orderBy('id','desc')->get(); 
+        $mtruckmakes = Mtruckmake::where('status','1')->orderBy('id','desc')->get();
 
         if ($mtruckmakes->isEmpty()) {
             return response()->json(['error' => 'No Truck Make Found.'], 404);

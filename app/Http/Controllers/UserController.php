@@ -33,20 +33,29 @@ class UserController extends Controller
 
         $transformedUserRoles = [];
         foreach ($users as $userrole) {
+
+            $parentname =  getval('roles', 'id', $userrole->parent_id, 'name');
             // $parentname =  getval('roles', 'id', $userrole->parent_id, 'name');
             $dataObject = (object)[];
+
             $dataObject->id = $userrole->id;
             $dataObject->role_id = $userrole->role_id;
+
+            $dataObject->parent_id = $userrole->parent_id;
             // $dataObject->role_name = $userrole->role->name;
             $dataObject->parent_id = $userrole->parent_id;
-            // $dataObject->parent_name = $parentname;
             $dataObject->name = $userrole->name;
             $dataObject->mobile_no = $userrole->mobile_no;
             $dataObject->email = $userrole->email;
+
             $dataObject->address = $userrole->address;
+
             $transformedUserRoles[] = $dataObject;
+
         }
+
         return response()->json($transformedUserRoles);
+        return  "ok"; die;
     }
 
     // public function userlist()
@@ -108,12 +117,12 @@ class UserController extends Controller
     {
         // return $request;
         $validator = Validator::make($request->all(), [
-            'role_id' => 'required',
-            'name' => 'required|string|max:255',
-            'mobile_no' => 'required|string|max:12',
-            'email' => 'required|email',
-            'password' => 'required|string',
-            'address' => 'required|',
+            // 'role_id' => 'required',
+
+            // 'email' => 'required|email', 'name' => 'required|string|max:255',
+            // 'mobile_no' => 'required|string|max:12',
+            // 'password' => 'required|string',
+            // 'address' => 'required|',
         ]);
 
         if ($validator->fails()) {
@@ -162,9 +171,9 @@ class UserController extends Controller
         // return "okk";die;
         try {
             $users = DB::table('users')
-            ->join('roles as roles', 'users.role_id', '=', 'roles.id')  
-            ->join('roles as parent_roles', 'users.parent_id', '=', 'parent_roles.id')  
-            ->select('users.*','roles.name as role_name', 'parent_roles.name as parent_name') 
+            ->join('roles as roles', 'users.role_id', '=', 'roles.id')
+            ->join('roles as parent_roles', 'users.parent_id', '=', 'parent_roles.id')
+            ->select('users.*','roles.name as role_name', 'parent_roles.name as parent_name')
             ->where("users.id", $request->id)->get();
             // $users = DB::table('users as tsinfo')
             //     ->join('mtyretypes as ttinfo', 'tsinfo.tyretype_id', '=', 'ttinfo.id')
