@@ -136,10 +136,14 @@ Route::middleware([TokenAuth::class])->group(function () {
     Route::get('getTruckMakeTruckModel', [TyreentryController::class, 'getTruckMakeTruckModel']);
     Route::get('getPositionType', [TyreentryController::class, 'getPositionType']);
     Route::get('getType', [TyreentryController::class, 'getType']);
+    Route::get('getUniqueTyreNo', [TyreentryController::class, 'getUniqueTyreNo']);
 
-    // tyre entry
+    // tyre removal
     Route::post('insertTyreRemoval', [TyreremovalController::class, 'insertTyreRemoval']);
+    Route::delete('deleteTyreRemoval', [TyreremovalController::class, 'deleteTyreRemoval']);
+    Route::put('updateTyreRemoval', [TyreremovalController::class, 'updateTyreRemoval']);
     Route::get('getTyreInfoById', [TyreremovalController::class, 'getTyreInfoById']);
     Route::get('getTyreSiteByIdInfo', [TyreremovalController::class, 'getTyreSiteByIdInfo']);
-    Route::get('getCountFitmanById', [TyreremovalController::class, 'getCountFitmanById']);
+    Route::get('getcurrentStatus', [TyreremovalController::class, 'getcurrentStatus']);
+    Route::get('tyreRemovallist', [TyreremovalController::class, 'tyreRemovallist']);
 });

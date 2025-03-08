@@ -143,7 +143,7 @@ class TyreentryController extends Controller
         $tyreinformations->tyresize_id = $request->tyresize_id;
         $tyreinformations->ponumber = $request->ponumber;
         $tyreinformations->make_id =  $request->make_id;
-        $tyreinformations->tyre_no =  $request->tyre_no;
+        $tyreinformations->tyre_no =  strtoupper($request->tyre_no);
         $tyreinformations->current_status = 'running';
         $tyreinformations->otl =  $request->otl;
         $tyreinformations->otd =  $request->otd;
@@ -153,7 +153,7 @@ class TyreentryController extends Controller
         $existingTyre_no = Tyreinformation::where('tyre_no', $tyreinformations->tyre_no)->first();
         if ($existingTyre_no) {
             // Handle duplicate Email Id
-            $obj = ["Status" => false, "success" => 0, "errors" => 'Tyre Number Number has already been taken.'];
+            $obj = ["Status" => false, "success" => 0, "errors" => 'Tyre Sr. Number has already been taken.'];
             return response()->json($obj);
         }
         try {
@@ -522,4 +522,25 @@ class TyreentryController extends Controller
         }
         return response()->json($transTyrePosition);
     }
+
+        // get Tyre Information tyre_no 
+        public function getUniqueTyreNo()
+        {
+            // return "okk";die;
+            $tyreinformations = Tyreinformation::orderBy('id', 'desc')->get();
+
+            // return  $tyreinformations ;
+            if ($tyreinformations->isEmpty()) {
+                return response()->json(['Status' => false, 'Success' => '0', 'msg' => 'Type Number Not Found!!']);
+            }
+            $transTyreInformation = [];
+            foreach ($tyreinformations as $tyreNumber) {
+                $dataTyreNumber = (object)[];
+                $dataTyreNumber->id = $tyreNumber->id;
+                $dataTyreNumber->tyre_no = $tyreNumber->tyre_no;
+                // $dataTyreNumber->category_name = $tyrepositon->category_name;
+                $transTyreInformation[] = $dataTyreNumber;
+            }
+            return response()->json($transTyreInformation);
+        }
 }
