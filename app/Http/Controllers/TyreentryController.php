@@ -65,13 +65,14 @@ class TyreentryController extends Controller
             $make_name = getval('mmakes', 'id', $tyreinfo->make_id, 'category_name');
             $tyre_info_name = getval('tyreinformations', 'id', $tyreinfo->tyre_info_id, 'tyre_no');
             $project_name = getval('siteprojects', 'id', $tyreinfo->project_id, 'project_name');
+            $project_site_id = getval('siteprojects', 'id', $tyreinfo->project_id, 'site_id');
             $truck_make_id = getval('mtruckmodels', 'id', $tyreinfo->truck_modal_id, 'truckmake_id');
             $truck_make_name = getval('mtruckmakes', 'id', $truck_make_id, 'category_name');
             $truck_modal_name = getval('mtruckmodels', 'id', $tyreinfo->truck_modal_id, 'category_name');
             $position_name = getval('mtyrepositions', 'id', $tyreinfo->position_id, 'category_name');
 
             // $position_type_id = getval('mtyrepositions', 'id', $tyreinfo->position_id, 'type');
-            // return $position_type_id;die;
+            // return $project_site_id;die;
             // $tyrefitman_name = getval('tyrefitmanremovalinfos','id',$tyreinfo->tfr_id,'name');
 
             $dataTyreEntry = (object)[];
@@ -88,6 +89,7 @@ class TyreentryController extends Controller
             $dataTyreEntry->otd = $tyreinfo->otd;
             $dataTyreEntry->tyre_info_id = $tyreinfo->tyre_info_id;
             $dataTyreEntry->tyre_info_name = $tyre_info_name;
+            $dataTyreEntry->project_site_id = $project_site_id;
             $dataTyreEntry->project_id = $tyreinfo->project_id;
             $dataTyreEntry->project_name = $project_name;
             $dataTyreEntry->truck_make_id = $truck_make_id;
