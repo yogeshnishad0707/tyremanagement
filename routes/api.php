@@ -141,4 +141,5 @@ Route::middleware([TokenAuth::class])->group(function () {
     Route::post('insertTyreRemoval', [TyreremovalController::class, 'insertTyreRemoval']);
     Route::get('getTyreInfoById', [TyreremovalController::class, 'getTyreInfoById']);
     Route::get('getTyreSiteByIdInfo', [TyreremovalController::class, 'getTyreSiteByIdInfo']);
+    Route::get('getCountFitmanById', [TyreremovalController::class, 'getCountFitmanById']);
 });
