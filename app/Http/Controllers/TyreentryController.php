@@ -44,29 +44,40 @@ class TyreentryController extends Controller
                 'tyrefitmanremovalinfos.lbsr',
                 'tyrefitmanremovalinfos.type',
                 'tyreperformanceinfos.tfr_id',
-                'tyreperformanceinfos.rtd_a',
-                'tyreperformanceinfos.rtd_b',
+                // 'tyreperformanceinfos.rtd_a',
+                // 'tyreperformanceinfos.rtd_b',
                 'tyreperformanceinfos.current_hmr',
                 'tyreinformations.status',
                 'tyreinformations.operatorid',
             )
+            // ->where('tyreinformations.id','tyresiteinfos.tyre_info_id')
+            // ->where('tyresiteinfos.id','tyrefitmanremovalinfos.tyre_site_id')
+            // ->where('tyresiteinfos.id','tyreperformanceinfos.tyre_site_id')
             ->orderBy('tyreinformations.id', 'desc')
             ->get();
         // return $tyreinformations;die;
 
         $transTyreEntryList = [];
         foreach ($tyreinformations as $tyreinfo) {
+            $tyretype_id = getval('mtyresizes','id',$tyreinfo->tyresize_id,'tyretype_id');
+            $tyretype_name = getval('mtyretypes','id',$tyretype_id,'category_name');
             $tyresize_name = getval('mtyresizes', 'id', $tyreinfo->tyresize_id, 'category_name');
             $make_name = getval('mmakes', 'id', $tyreinfo->make_id, 'category_name');
             $tyre_info_name = getval('tyreinformations', 'id', $tyreinfo->tyre_info_id, 'tyre_no');
             $project_name = getval('siteprojects', 'id', $tyreinfo->project_id, 'project_name');
+            $truck_make_id = getval('mtruckmodels', 'id', $tyreinfo->truck_modal_id, 'truckmake_id');
+            $truck_make_name = getval('mtruckmakes', 'id', $truck_make_id, 'category_name');
             $truck_modal_name = getval('mtruckmodels', 'id', $tyreinfo->truck_modal_id, 'category_name');
             $position_name = getval('mtyrepositions', 'id', $tyreinfo->position_id, 'category_name');
-            // $tyre_site_name = getval('tyresiteinfos','id',$tyreinfo->tyre_site_id,'name');
+
+            // $position_type_id = getval('mtyrepositions', 'id', $tyreinfo->position_id, 'type');
+            // return $position_type_id;die;
             // $tyrefitman_name = getval('tyrefitmanremovalinfos','id',$tyreinfo->tfr_id,'name');
 
             $dataTyreEntry = (object)[];
             $dataTyreEntry->id = $tyreinfo->id;
+            $dataTyreEntry->tyretype_id = $tyretype_id;
+            $dataTyreEntry->tyretype_name = $tyretype_name;
             $dataTyreEntry->tyresize_id = $tyreinfo->tyresize_id;
             $dataTyreEntry->tyresize_name = $tyresize_name;
             $dataTyreEntry->make_id = $tyreinfo->make_id;
@@ -79,9 +90,12 @@ class TyreentryController extends Controller
             $dataTyreEntry->tyre_info_name = $tyre_info_name;
             $dataTyreEntry->project_id = $tyreinfo->project_id;
             $dataTyreEntry->project_name = $project_name;
+            $dataTyreEntry->truck_make_id = $truck_make_id;
+            $dataTyreEntry->truck_make_name = $truck_make_name;
             $dataTyreEntry->truck_modal_id = $tyreinfo->truck_modal_id;
             $dataTyreEntry->truck_modal_name = $truck_modal_name;
             $dataTyreEntry->position_id = $tyreinfo->position_id;
+            $dataTyreEntry->position_type_id = $tyreinfo->position_id;
             $dataTyreEntry->position_name  = $position_name;
             $dataTyreEntry->ponumber = $tyreinfo->ponumber;
             $dataTyreEntry->truck_no = $tyreinfo->truck_no;
@@ -92,8 +106,8 @@ class TyreentryController extends Controller
             $dataTyreEntry->service_date = $tyreinfo->service_date;
             $dataTyreEntry->lbsr = $tyreinfo->lbsr;
             $dataTyreEntry->tfr_id = $tyreinfo->tfr_id;
-            $dataTyreEntry->rtd_a = $tyreinfo->rtd_a;
-            $dataTyreEntry->rtd_b = $tyreinfo->rtd_b;
+            // $dataTyreEntry->rtd_a = $tyreinfo->rtd_a;
+            // $dataTyreEntry->rtd_b = $tyreinfo->rtd_b;
             $dataTyreEntry->current_hmr = $tyreinfo->current_hmr;
             $dataTyreEntry->status = $tyreinfo->status;
             $dataTyreEntry->operatorid = $tyreinfo->operatorid;
@@ -168,7 +182,7 @@ class TyreentryController extends Controller
             $tyresiteinfos->rear_life = $request->rear_life ?? '0';
             $tyresiteinfos->repair_life = $request->repair_life ?? '0';
             $tyresiteinfos->current_status = 'running';
-            $tyresiteinfos->remark = '1st fitman';
+            $tyresiteinfos->remark = '1';
             $tyresiteinfos->status = $request->status;
             $tyresiteinfos->operatorid = $request->operatorid;
 
@@ -190,7 +204,7 @@ class TyreentryController extends Controller
             $tyrefitmanremovalinfos->type =  'fitman';
             $tyrefitmanremovalinfos->service_date =  $request->service_date;
             $tyrefitmanremovalinfos->lbsr =  $request->lbsr ?? ($request->current_hmr ?? 0);
-            $tyrefitmanremovalinfos->remark = '1st fitman';
+            $tyrefitmanremovalinfos->remark = '1';
 
             // $fitmaninfo = $tyrefitmanremovalinfos->save();
             // $tyrefitmanid = $fitmaninfo[0]->id;//last insertid
@@ -212,12 +226,12 @@ class TyreentryController extends Controller
             $tyreperformanceinfos->rtd_b =  $request->rtd_b ?? '0';
             $tyreperformanceinfos->current_hmr = $request->current_hmr ?? ($request->lbsr ?? 0);
             $tyreperformanceinfos->lbsr =  $request->lbsr ?? ($request->current_hmr ?? 0);
-            $tyreperformanceinfos->hcicm =  $request->hcicm;
+            $tyreperformanceinfos->hcicm =  $request->hcicm ?? '0';
             $tyreperformanceinfos->service_date =  $request->service_date;
             $tyreperformanceinfos->fl =  $request->fl ?? '0';
             $tyreperformanceinfos->rl =  $request->rl ?? '0';
             $tyreperformanceinfos->repaire_life =  $request->repaire_life ?? '0';
-            $tyreperformanceinfos->remark =  '1st fitman';
+            $tyreperformanceinfos->remark =  '1';
             $tyreperformanceinfos->operatorid =  $request->operatorid;
 
             $tyreperformanceinfos->save();
@@ -303,7 +317,7 @@ class TyreentryController extends Controller
                 'rear_life' => $request->rear_life ?? '0',
                 'repair_life' => $request->repair_life ?? '0',
                 'current_status' => 'running',
-                'remark' => '1st fitmant',
+                'remark' => '1',
                 'status' => $request->status,
                 'operatorid' => $request->operatorid,
             ]);
@@ -319,7 +333,7 @@ class TyreentryController extends Controller
                 'type' => 'fitman',
                 'service_date' => $request->service_date,
                 'lbsr' => $request->lbsr ?? ($request->current_hmr ?? 0),
-                'remark' => '1st fitman',
+                'remark' => '1',
             ]);
             $tyrefitmanremovalinfos->save();
 
@@ -335,12 +349,12 @@ class TyreentryController extends Controller
                 'rtd_b' => $request->rtd_b ?? '0',
                 'current_hmr' => $request->current_hmr ?? ($request->lbsr ?? 0),
                 'lbsr' => $request->lbsr ?? ($request->current_hmr ?? 0),
-                'hcicm' => $request->hcicm,
+                'hcicm' => $request->hcicm ?? '0',
                 'service_date' => $request->service_date,
                 'fl' => $request->fl ?? '0',
                 'rl' => $request->rl ?? '0',
                 'repaire_life' => $request->repaire_life ?? '0',
-                'remark' => '1st fitman',
+                'remark' => '1',
                 'operatorid' => $request->operatorid,
             ]);
             $tyreperformanceinfos->save();
