@@ -121,7 +121,6 @@ Route::middleware([TokenAuth::class])->group(function () {
     Route::get('gettruckmodel', [TyresiteinfoController::class, 'gettruckmodel']);
     Route::get('gettyreinfo', [TyresiteinfoController::class, 'gettyreinfo']);
     Route::get('gettyreposition', [TyresiteinfoController::class, 'gettyreposition']);
-     Route::get('gettyretypeById', [MtypesizeController::class, 'gettyretypeById']);
     Route::get('makelist', [MmakeController::class, 'makelist']);
     Route::post('insertMake', [MmakeController::class, 'insertMake']);
     Route::get('getMakeByid', [MmakeController::class, 'getMakeByid']);
@@ -137,7 +136,9 @@ Route::middleware([TokenAuth::class])->group(function () {
     Route::get('getTruckMakeTruckModel', [TyreentryController::class, 'getTruckMakeTruckModel']);
     Route::get('getPositionType', [TyreentryController::class, 'getPositionType']);
     Route::get('getType', [TyreentryController::class, 'getType']);
+    Route::get('getUniqueTyreNo', [TyreentryController::class, 'getUniqueTyreNo']);
 
+    // tyre removal
     Route::post('insertTyreRemoval', [TyreremovalController::class, 'insertTyreRemoval']);
     Route::delete('deleteTyreRemoval', [TyreremovalController::class, 'deleteTyreRemoval']);
     Route::put('updateTyreRemoval', [TyreremovalController::class, 'updateTyreRemoval']);
