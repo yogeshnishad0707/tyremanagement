@@ -534,24 +534,6 @@ class TyreentryController extends Controller
         return response()->json($transTyrePosition);
     }
 
-        // get Tyre Information tyre_no 
-    // public function getUniqueTyreNo(Request $request)
-    // {
-    //     // return "okk";die;
-    //     // $tyreinformations = Tyreinformation::orderBy('id', 'desc')->get();
-    //     $tyreinformations = Tyreinformation::where('tyre_no', $request->tyre_no)->get();
-    //     // return  $tyreinformations ;
-    //     if ($tyreinformations) {
-    //         return response()->json([
-    //             'Status' => false,
-    //             'Success' => '0',
-    //             'msg' => 'Tyre Number already exists!!'
-    //         ]);
-    //     }
-    //     return response()->json($tyreinformations);
-
-    // }
-
     public function getUniqueTyreNo(Request $request)
     {
         // Validate the request
