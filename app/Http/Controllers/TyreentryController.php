@@ -12,7 +12,7 @@ use App\Models\Mtyresize;
 use App\Models\Mmake;
 use App\Models\Mtruckmodel;
 use App\Models\Mtyreposition;
-
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class TyreentryController extends Controller
@@ -125,7 +125,7 @@ class TyreentryController extends Controller
     // get site Tyre Entry Insert
     public function insertTyreEntry(Request $request)
     {
-        // return "hello";die;
+        // Validate the incoming request
         $validator = Validator::make($request->all(), [
             'project_id' => 'required',
             'tyresize_id' => 'required',
@@ -141,39 +141,43 @@ class TyreentryController extends Controller
             $obj = ["Status" => false, "success" => 0, "errors" => $validator->errors()];
             return response()->json($obj);
         }
-        //create tyre information
-        $tyreinformations = new Tyreinformation();
-        // $tyreinformations->tyretype_id = $request->tyretype_id;
-        $tyreinformations->tyresize_id = $request->tyresize_id;
-        $tyreinformations->ponumber = $request->ponumber;
-        $tyreinformations->make_id =  $request->make_id;
-        $tyreinformations->tyre_no =  strtoupper($request->tyre_no);
-        $tyreinformations->current_status = 'running';
-        $tyreinformations->otl =  $request->otl;
-        $tyreinformations->otd =  $request->otd;
-        $tyreinformations->status =  $request->status;
-        $tyreinformations->operatorid = $request->operatorid;
 
-        $existingTyre_no = Tyreinformation::where('tyre_no', $tyreinformations->tyre_no)->first();
-        if ($existingTyre_no) {
-            // Handle duplicate Email Id
-            $obj = ["Status" => false, "success" => 0, "errors" => 'Tyre Sr. Number has already been taken.'];
-            return response()->json($obj);
-        }
+        // Start the transaction
+        DB::beginTransaction();
+
         try {
-            // $tyreinfo = $tyreinformations->save();
-            // $tyre_infoid =$tyreinfo[0]->id; //last insertid
+            // Create tyre information
+            $tyreinformations = new Tyreinformation();
+            $tyreinformations->tyresize_id = $request->tyresize_id;
+            $tyreinformations->ponumber = $request->ponumber;
+            $tyreinformations->make_id =  $request->make_id;
+            $tyreinformations->tyre_no =  strtoupper($request->tyre_no);
+            $tyreinformations->current_status = 'running';
+            $tyreinformations->otl =  $request->otl;
+            $tyreinformations->otd =  $request->otd;
+            $tyreinformations->status =  $request->status;
+            $tyreinformations->operatorid = $request->operatorid;
+
+            // Check if tyre number already exists
+            $existingTyre_no = Tyreinformation::where('tyre_no', $tyreinformations->tyre_no)->first();
+            if ($existingTyre_no) {
+                DB::rollBack(); // Rollback if tyre number already exists
+                $obj = ["Status" => false, "success" => 0, "errors" => 'Tyre Sr. Number has already been taken.'];
+                return response()->json($obj);
+            }
+
+            // Save tyre information
             $tyreinfo = $tyreinformations->save();
-            if ($tyreinfo) {
-                // Save successful, get the last insert ID
-                $tyre_infoid = $tyreinformations->id; // Use the ID directly
-            } else {
-                // Handle error if save fails
+            if (!$tyreinfo) {
+                DB::rollBack();
                 $obj = ["Status" => false, "success" => 0, "msg" => "Tyre Entry Not Added!!"];
                 return response()->json($obj);
             }
 
-            // create a new tyre site information
+            // Get the ID of the newly inserted tyre
+            $tyre_infoid = $tyreinformations->id;
+
+            // Create a new tyre site information
             $tyresiteinfos = new Tyresiteinfos();
             $tyresiteinfos->project_id = $request->project_id;
             $tyresiteinfos->truck_modal_id = $request->truck_modal_id;
@@ -192,59 +196,66 @@ class TyreentryController extends Controller
             $tyresiteinfos->status = $request->status;
             $tyresiteinfos->operatorid = $request->operatorid;
 
-            // $tyresite = $tyresiteinfos->save();
-            // $tyresite_id = $tyresite[0]->id;//last insertid
+            // Save tyre site information
             $tyresite = $tyresiteinfos->save();
-            if ($tyresite) {
-                // Save successful, get the last insert ID
-                $tyresite_id = $tyresiteinfos->id; // Use the ID directly
-            } else {
-                // Handle error if save fails
-                $obj = ["Status" => false, "success" => 0, "msg" => "Tyre Entry Not Added!!"];
+            if (!$tyresite) {
+                DB::rollBack();
+                $obj = ["Status" => false, "success" => 0, "msg" => "Tyre Site Entry Not Added!!"];
                 return response()->json($obj);
             }
 
-            //create tyre fitment removal information
+            // Get the ID of the newly inserted tyre site
+            $tyresite_id = $tyresiteinfos->id;
+
+            // Create tyre fitment removal information
             $tyrefitmanremovalinfos = new Tyrefitmanremovalinfo();
             $tyrefitmanremovalinfos->tyre_site_id = $tyresite_id;
-            $tyrefitmanremovalinfos->type =  'fitman';
-            $tyrefitmanremovalinfos->service_date =  $request->service_date;
-            $tyrefitmanremovalinfos->lbsr =  $request->lbsr ?? ($request->current_hmr ?? 0);
+            $tyrefitmanremovalinfos->type = 'fitman';
+            $tyrefitmanremovalinfos->service_date = $request->service_date;
+            $tyrefitmanremovalinfos->lbsr = $request->lbsr ?? ($request->current_hmr ?? 0);
             $tyrefitmanremovalinfos->remark = '1';
 
-            // $fitmaninfo = $tyrefitmanremovalinfos->save();
-            // $tyrefitmanid = $fitmaninfo[0]->id;//last insertid
+            // Save tyre fitment removal information
             $fitmaninfo = $tyrefitmanremovalinfos->save();
-            if ($fitmaninfo) {
-                // Save successful, get the last insert ID
-                $tyrefitmanid = $tyrefitmanremovalinfos->id; // Use the ID directly
-            } else {
-                // Handle error if save fails
-                $obj = ["Status" => false, "success" => 0, "msg" => "Tyre Entry Not Added!!"];
+            if (!$fitmaninfo) {
+                DB::rollBack();
+                $obj = ["Status" => false, "success" => 0, "msg" => "Tyre Fitment Removal Entry Not Added!!"];
                 return response()->json($obj);
             }
 
-            //create tyre performance information
+            // Get the ID of the newly inserted fitment removal info
+            $tyrefitmanid = $tyrefitmanremovalinfos->id;
+
+            // Create tyre performance information
             $tyreperformanceinfos = new Tyreperformanceinfo();
             $tyreperformanceinfos->tyre_site_id = $tyresite_id;
-            $tyreperformanceinfos->tfr_id =  $tyrefitmanid;
-            $tyreperformanceinfos->rtd_a =  $request->rtd_a ?? '0';
-            $tyreperformanceinfos->rtd_b =  $request->rtd_b ?? '0';
+            $tyreperformanceinfos->tfr_id = $tyrefitmanid;
+            $tyreperformanceinfos->rtd_a = $request->rtd_a ?? '0';
+            $tyreperformanceinfos->rtd_b = $request->rtd_b ?? '0';
             $tyreperformanceinfos->current_hmr = $request->current_hmr ?? ($request->lbsr ?? 0);
-            $tyreperformanceinfos->lbsr =  $request->lbsr ?? ($request->current_hmr ?? 0);
-            $tyreperformanceinfos->hcicm =  $request->hcicm ?? '0';
-            $tyreperformanceinfos->service_date =  $request->service_date;
-            $tyreperformanceinfos->fl =  $request->fl ?? '0';
-            $tyreperformanceinfos->rl =  $request->rl ?? '0';
-            $tyreperformanceinfos->repaire_life =  $request->repaire_life ?? '0';
-            $tyreperformanceinfos->remark =  '1';
-            $tyreperformanceinfos->operatorid =  $request->operatorid;
+            $tyreperformanceinfos->lbsr = $request->lbsr ?? ($request->current_hmr ?? 0);
+            $tyreperformanceinfos->hcicm = $request->hcicm ?? '0';
+            $tyreperformanceinfos->service_date = $request->service_date;
+            $tyreperformanceinfos->fl = $request->fl ?? '0';
+            $tyreperformanceinfos->rl = $request->rl ?? '0';
+            $tyreperformanceinfos->repaire_life = $request->repaire_life ?? '0';
+            $tyreperformanceinfos->remark = '1';
+            $tyreperformanceinfos->operatorid = $request->operatorid;
 
+            // Save tyre performance information
             $tyreperformanceinfos->save();
-            return response()->json(['message' => 'Tyre Tyre Entry Added successfully!']);
+
+            // Commit the transaction
+            DB::commit();
+
+            return response()->json(['message' => 'Tyre Entry Added successfully!']);
+
         } catch (\Exception $ex) {
-            return $ex;
-            $obj = ["Status" => false, "success" => 0, "msg" => "Tyre Tyre Entry Not Added!!"];
+            // Rollback the transaction in case of an error
+            DB::rollBack();
+
+            // Return error response
+            $obj = ["Status" => false, "success" => 0, "msg" => "Tyre Entry Not Added!!", "error" => $ex->getMessage()];
             return response()->json($obj);
         }
     }
@@ -529,22 +540,48 @@ class TyreentryController extends Controller
     }
 
         // get Tyre Information tyre_no 
-        public function getUniqueTyreNo()
-        {
-            // return "okk";die;
-            $tyreinformations = Tyreinformation::orderBy('id', 'desc')->get();
-            // return  $tyreinformations ;
-            if ($tyreinformations->isEmpty()) {
-                return response()->json(['Status' => false, 'Success' => '0', 'msg' => 'Type Number Not Found!!']);
-            }
-            $transTyreInformation = [];
-            foreach ($tyreinformations as $tyreNumber) {
-                $dataTyreNumber = (object)[];
-                $dataTyreNumber->id = $tyreNumber->id;
-                $dataTyreNumber->tyre_no = $tyreNumber->tyre_no;
-                // $dataTyreNumber->category_name = $tyrepositon->category_name;
-                $transTyreInformation[] = $dataTyreNumber;
-            }
-            return response()->json($transTyreInformation);
+    // public function getUniqueTyreNo(Request $request)
+    // {
+    //     // return "okk";die;
+    //     // $tyreinformations = Tyreinformation::orderBy('id', 'desc')->get();
+    //     $tyreinformations = Tyreinformation::where('tyre_no', $request->tyre_no)->get();
+    //     // return  $tyreinformations ;
+    //     if ($tyreinformations) {
+    //         return response()->json([
+    //             'Status' => false,
+    //             'Success' => '0',
+    //             'msg' => 'Tyre Number already exists!!'
+    //         ]);
+    //     }
+    //     return response()->json($tyreinformations);
+
+    // }
+
+    public function getUniqueTyreNo(Request $request)
+    {
+        // Validate the request
+        $request->validate([
+            'tyre_no' => 'required|string', 
+        ]);
+
+        // Get the tyre_no from the request
+        $tyre_no = $request->query('tyre_no');
+
+        // Check if the tyre_no already exists in the database
+        $existingTyre = Tyreinformation::where('tyre_no', $tyre_no)->first();
+
+        if ($existingTyre) {
+            // If the tyre_no exists, return a response indicating it is not unique
+            return response()->json([
+                'exists' => true,
+                'message' => 'Tyre number already exists!',
+            ]);
+        } else {
+            // If the tyre_no does not exist, return a response indicating it is unique
+            return response()->json([
+                'exists' => false,
+                'message' => 'Tyre number is unique.',
+            ]);
         }
+    }
 }

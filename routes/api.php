@@ -146,4 +146,5 @@ Route::middleware([TokenAuth::class])->group(function () {
     Route::get('getTyreSiteByIdInfo', [TyreremovalController::class, 'getTyreSiteByIdInfo']);
     Route::get('getcurrentStatus', [TyreremovalController::class, 'getcurrentStatus']);
     Route::get('tyreRemovallist', [TyreremovalController::class, 'tyreRemovallist']);
+    Route::get('calculateHCICM', [TyreremovalController::class, 'CalculateHCICM']);
 });
